@@ -20,7 +20,7 @@ from . import botsglobal
 #******************************************
 #* read a plugin **************************
 #******************************************
-@django.db.transaction.commit_on_success  #if no exception raised: commit, else rollback.
+@django.db.transaction.atomic  #if no exception raised: commit, else rollback.
 def read_index(filename):
     ''' process index file in default location. '''
     try:
@@ -45,7 +45,7 @@ def read_index(filename):
         botsglobal.logger.info(_('Writing to database is OK.'))
 
 
-@django.db.transaction.commit_on_success  #if no exception raised: commit, else rollback.
+@django.db.transaction.atomic  #if no exception raised: commit, else rollback.
 def read_plugin(pathzipfile):
     ''' process uploaded plugin. '''
     #test if valid zipfile

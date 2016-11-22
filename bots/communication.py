@@ -706,7 +706,7 @@ class _comsession(object):
             else:
                 ta.datetime = datetime.datetime.now()
         try:
-            tofilename = tofilename.format(**ta.__dict__)   #do the actual formatting 
+            tofilename = tofilename.format(infile=ta.infilename,**ta.__dict__)   #do the actual formatting 
         except:
             txt = botslib.txtexc()
             raise botslib.CommunicationOutError(_('Error in formatting outgoing filename "%(filename)s". Error: "%(error)s".'),
