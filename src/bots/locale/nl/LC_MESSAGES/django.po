@@ -1917,7 +1917,7 @@ msgstr ""
 #: models.py:243
 msgid ""
 "Incoming: use wild-cards eg: \"*.edi\". <br>Outgoing: many options, see <a "
-"target=\"_blank\" href=\"http://code.google.com/p/bots/wiki/Filenames"
+"target=\"_blank\" href=\"https://bots-edi.github.io/bots/configuration/channel/filenames.html"
 "\">wiki</a>. Advised: use \"*\" in filename (is replaced by unique counter "
 "per channel); eg \"D_*.edi\" gives D_1.edi, D_2.edi, etc."
 msgstr ""
@@ -1979,8 +1979,8 @@ msgstr "Path voor archivering"
 
 #: models.py:253
 msgid ""
-"Write edi files to an archive. See <a target=\"_blank\" href=\"http://code."
-"google.com/p/bots/wiki/Archiving\">wiki</a>. Eg: \"C:/edi/archive/mychannel"
+"Write edi files to an archive. See <a target=\"_blank\" href=\"https://"
+"bots-edi.github.io/bots/deployment/archiving.html\">wiki</a>. Eg: \"C:/edi/archive/mychannel"
 "\"."
 msgstr ""
 
@@ -2020,8 +2020,8 @@ msgstr ""
 
 #: models.py:260
 msgid ""
-"Path used during acceptance tests, see <a target=\"_blank\" href=\"http://"
-"code.google.com/p/bots/wiki/DeploymentAcceptance\">wiki</a>."
+"Path used during acceptance tests, see <a target=\"_blank\" href=\"https://"
+"bots-edi.github.io/bots/advanced-deployment/change-management.html#isolated-acceptance-testing\">wiki</a>."
 msgstr ""
 
 #: models.py:273

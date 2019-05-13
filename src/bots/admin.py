@@ -44,7 +44,7 @@ class CcodeAdmin(BotsAdmin):
                      'attr2', 'attr3', 'attr4', 'attr5', 'attr6', 'attr7', 'attr8')
     fieldsets = (
         (None, {'fields': ('ccodeid', 'leftcode', 'rightcode', 'attr1', 'attr2', 'attr3', 'attr4', 'attr5', 'attr6', 'attr7', 'attr8'),
-                'description': 'For description of user code lists and usage in mapping: see <a target="_blank" href="http://code.google.com/p/bots/wiki/MappingCcode">wiki</a>.',
+                'description': 'For description of user code lists and usage in mapping: see <a target="_blank" href="https://bots-edi.github.io/bots/configuration/mapping-scripts/code-conversion.html">wiki</a>.',
                 'classes': ('wide extrapretty',)
                 }),
         )
@@ -88,7 +88,7 @@ class ChannelAdmin(BotsAdmin):
                              'classes': ('collapse wide extrapretty',)
                              }),
         (_('Safe writing & file locking'), {'fields': ('mdnchannel', 'syslock', 'lockname'),
-                                            'description': 'For more info see <a target="_blank" href="http://code.google.com/p/bots/wiki/ChannelFileLock">wiki</a><br>',
+                                            'description': 'For more info see <a target="_blank" href="https://bots-edi.github.io/bots/configuration/channel/file-locking.html">wiki</a><br>',
                                             'classes': ('collapse wide extrapretty',)
                                             }),
         (_('Other'), {'fields': ('testpath', 'keyfile', 'certfile', 'rsrv2', 'rsrv1', 'parameters'),

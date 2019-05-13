@@ -310,7 +310,7 @@ class channel(models.Model):
         'Delete incoming edi files after reading.<br>Use in production else files are read again and again.'))
     path = StripCharField(max_length=256, blank=True)  # different from host - in ftp both host and path are used
     filename = StripCharField(max_length=256, blank=True, help_text=_(
-        'Incoming: use wild-cards eg: "*.edi".<br>Outgoing: many options, see <a target="_blank" href="http://code.google.com/p/bots/wiki/Filenames">wiki</a>.<br>Advised: use "*" in filename (is replaced by unique counter per channel).<br>eg "D_*.edi" gives D_1.edi, D_2.edi, etc.'))
+        'Incoming: use wild-cards eg: "*.edi".<br>Outgoing: many options, see <a target="_blank" href="https://bots-edi.github.io/bots/configuration/channel/filenames.html">wiki</a>.<br>Advised: use "*" in filename (is replaced by unique counter per channel).<br>eg "D_*.edi" gives D_1.edi, D_2.edi, etc.'))
     lockname = StripCharField(max_length=35, blank=True, verbose_name=_(
         'Lock-file'), help_text=_('Directory locking: if lock-file exists in directory, directory is locked for reading/writing.'))
     syslock = models.BooleanField(default=False, verbose_name=_('System locks'), help_text=_(
@@ -329,7 +329,7 @@ class channel(models.Model):
     mdnchannel = StripCharField(max_length=35, blank=True, verbose_name=_('Tmp-part file name'), help_text=_(
         'Write file than rename. Bots renames to filename without this tmp-part.<br>Eg first write "myfile.edi.tmp", tmp-part is ".tmp", rename to "myfile.edi".'))  # 20140113:use as tmp part of file name
     archivepath = StripCharField(max_length=256, blank=True, verbose_name=_('Archive path'), help_text=_(
-        'Write edi files to an archive.<br>See <a target="_blank" href="http://code.google.com/p/bots/wiki/Archiving">wiki</a>. Eg: "C:/edi/archive/mychannel".'))  # added 20091028
+        'Write edi files to an archive.<br>See <a target="_blank" href="https://bots-edi.github.io/bots/deployment/archiving.html">wiki</a>. Eg: "C:/edi/archive/mychannel".'))  # added 20091028
     desc = models.TextField(max_length=256, null=True, blank=True, verbose_name=_('Description'))
     rsrv1 = TextAsInteger(max_length=35, blank=True, null=True, verbose_name=_('Max failures'), help_text=_(
         'Max number of connection failures of incommunication before this is reported as a processerror (default: direct report).'))  # added 20100501 #20140315: used as max_com
@@ -342,7 +342,7 @@ class channel(models.Model):
     certfile = StripCharField(max_length=256, blank=True, null=True, verbose_name=_('Certificate chain file'), help_text=_(
         'Path to file that contains PEM formatted certificate chain.'))  # added 20121201
     testpath = StripCharField(max_length=256, blank=True, verbose_name=_('Acceptance test path'), help_text=_(
-        'Path used during acceptance tests, see <a target="_blank" href="http://code.google.com/p/bots/wiki/DeploymentAcceptance">wiki</a>.'))  # added 20120111
+        'Path used during acceptance tests, see <a target="_blank" href="https://bots-edi.github.io/bots/advanced-deployment/change-management.html#isolated-acceptance-testing">wiki</a>.'))  # added 20120111
 
     def communicationscript(self):
         return script_link2(os.path.join(botsglobal.ini.get('directories', 'usersysabs'), 'communicationscripts', self.idchannel + '.py'))
