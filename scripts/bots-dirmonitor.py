@@ -3,5 +3,5 @@
 
 from bots import dirmonitor
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     dirmonitor.start()

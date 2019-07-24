@@ -9,12 +9,12 @@
 # - https://stackoverflow.com/questions/tagged/gitignore
 
 # bots-specific
-bots/botssys/*
-bots/djangolink/
-bots/installwin/
-bots/profile.tmp
+src/bots/botssys/*
+src/bots/djangolink/
+src/bots/installwin/
+src/bots/profile.tmp
 bots-webserver_dev.pid
-bots/usersys/index.py
+src/bots/usersys/index.py
 copy*
 
 # vi swap-files
@@ -47,6 +47,7 @@ lib64/
 parts/
 sdist/
 var/
+.venv
 
 # dotenv
 .env

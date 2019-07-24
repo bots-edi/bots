@@ -42,112 +42,108 @@ def read(*names, **kwargs):
 
     """
     fn = os.path.join(os.path.dirname(__file__), *names)
-    with io.open(fn, encoding=kwargs.get('encoding', 'utf8')) as fd:
+    with io.open(fn, encoding=kwargs.get("encoding", "utf8")) as fd:
         return fd.read()
 
 
-version = '3.3.1.dev0'
+version = "3.3.1.dev0"
 
 
 long_description = (
-    read('docs', 'readme.rst') +
-    '\n\n' +
-    read('docs', 'changes.rst')
+    read("docs", "readme.rst")
+    + "\n\n"
+    + read("docs", "changes.rst")
     #'\n\n' +
-    #read('docs', 'contributors.rst')
-    )
+    # read('docs', 'contributors.rst')
+)
 
 install_requires = [
-    'Cherrypy>3.1.0',
-    'click',
-    'Django>=1.4.0',
-    'future',
-    'setuptools',
-    'six',
-    ]
+    "Cherrypy==18.1.2",
+    "Cheroot==6.5.5",
+    "click==7.0",
+    "Django==1.11.22",
+    "psycopg2-binary==2.8.3",
+    "setuptools",
+    "six",
+]
 
 extras_require = {
-    'docs': [
-        'sphinx',
-        'sphinx_rtd_theme',
-        ],
-    'tools': [
-        'ecdsa',     # dep of paramiko
-        'Genshi',    # for using templates/mapping to HTML)
-        'paramiko',  # SFTP
-        'pdfminer',  # parse pdf-files
-        'pycrypto',  # SFTP
-        'xlrd',      # parse excel-files
-        ],
-    }
+    "docs": ["sphinx", "sphinx_rtd_theme"],
+    "tools": [
+        "ecdsa",  # dep of paramiko
+        "Genshi",  # for using templates/mapping to HTML)
+        "paramiko",  # SFTP
+        "pdfminer",  # parse pdf-files
+        "pycrypto",  # SFTP
+        "xlrd",  # parse excel-files
+    ],
+}
 
 # Add OS-specific dependencies
 operating_system = platform.system()
-if operating_system == 'Linux':
-    install_requires.append('pyinotify')
-elif operating_system == 'Windows':
-    install_requires.append('pywin32')
+if operating_system == "Linux":
+    install_requires.append("pyinotify")
+elif operating_system == "Windows":
+    install_requires.append("pywin32")
 
 classifiers = [
-    'Development Status :: 5 - Production/Stable',
-    'Operating System :: OS Independent',
-    'Programming Language :: Python',
-    'Programming Language :: Python :: 2',
-    'Programming Language :: Python :: 2.7',
-    'Programming Language :: Python :: 3.4',
-    'Programming Language :: Python :: 3.5',
-    'License :: OSI Approved :: GNU General Public License (GPL)',
-    'Topic :: Office/Business',
-    'Topic :: Office/Business :: Financial',
-    'Topic :: Other/Nonlisted Topic',
-    'Topic :: Communications',
-    'Environment :: Console',
-    'Environment :: Web Environment',
-    ]
+    "Development Status :: 5 - Production/Stable",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 2",
+    "Programming Language :: Python :: 2.7",
+    "Programming Language :: Python :: 3.4",
+    "Programming Language :: Python :: 3.5",
+    "License :: OSI Approved :: GNU General Public License (GPL)",
+    "Topic :: Office/Business",
+    "Topic :: Office/Business :: Financial",
+    "Topic :: Other/Nonlisted Topic",
+    "Topic :: Communications",
+    "Environment :: Console",
+    "Environment :: Web Environment",
+]
 
 setuptools.setup(
-    name='bots',
+    name="bots",
     version=version,
-    author='hjebbers',
-    author_email='hjebbers@gmail.com',
-    url='https://github.com/bots-edi/bots',
-    description='Bots open source edi translator',
+    author="hjebbers",
+    author_email="hjebbers@gmail.com",
+    url="https://github.com/bots-edi/bots",
+    description="Bots open source edi translator",
     long_description=long_description,
-    platforms='OS Independent (Written in an interpreted language)',
-    license='GNU General Public License (GPL)',
-    keywords='edi edifact x12 tradacoms xml fixedfile csv',
-    packages=setuptools.find_packages('src'),
-    package_dir={'': 'src'},
+    platforms="OS Independent (Written in an interpreted language)",
+    license="GNU General Public License (GPL)",
+    keywords="edi edifact x12 tradacoms xml fixedfile csv",
+    packages=setuptools.find_packages("src"),
+    package_dir={"": "src"},
     include_package_data=True,
     zip_safe=False,
     classifiers=classifiers,
     install_requires=install_requires,
     extras_require=extras_require,
-
     scripts=[
-        'scripts/bots-webserver.py',
-        'scripts/bots-engine.py',
-        'scripts/bots-grammarcheck.py',
-        'scripts/bots-xml2botsgrammar.py',
-        'scripts/bots-updatedb.py',
-        'scripts/bots-dirmonitor.py',
-        'scripts/bots-jobqueueserver.py',
-        'scripts/bots-plugoutindex.py',
-        'scripts/bots-job2queue.py',
-        ],
-
+        "scripts/bots-webserver.py",
+        "scripts/bots-engine.py",
+        "scripts/bots-grammarcheck.py",
+        "scripts/bots-xml2botsgrammar.py",
+        "scripts/bots-updatedb.py",
+        "scripts/bots-dirmonitor.py",
+        "scripts/bots-jobqueueserver.py",
+        "scripts/bots-plugoutindex.py",
+        "scripts/bots-job2queue.py",
+    ],
     entry_points={
-        'console_scripts': [
-            'bots-dirmonitor = bots.dirmonitor:start',
-            'bots-engine = bots.engine:start',
-            'bots-engine2 = bots.engine:start',
-            'bots-grammarcheck = bots.grammarcheck:start',
-            'bots-job2queue = bots.job2queue:start',
-            'bots-jobqueueserver = bots.jobqueueserver:start',
-            'bots-plugoutindex = bots.plugoutindex:start',
-            'bots-updatedb = bots.updatedb:start',
-            'bots-webserver = bots.webserver:start',
-            'bots-xml2botsgrammar = bots.xml2botsgrammar:start',
-            ]
-        },
-    )
+        "console_scripts": [
+            "bots-dirmonitor = bots.dirmonitor:start",
+            "bots-engine = bots.engine:start",
+            "bots-engine2 = bots.engine:start",
+            "bots-grammarcheck = bots.grammarcheck:start",
+            "bots-job2queue = bots.job2queue:start",
+            "bots-jobqueueserver = bots.jobqueueserver:start",
+            "bots-plugoutindex = bots.plugoutindex:start",
+            "bots-updatedb = bots.updatedb:start",
+            "bots-webserver = bots.webserver:start",
+            "bots-xml2botsgrammar = bots.xml2botsgrammar:start",
+        ]
+    },
+)

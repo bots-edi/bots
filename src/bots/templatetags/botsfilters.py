@@ -5,6 +5,7 @@ from django import template
 
 register = template.Library()
 
+
 @register.filter
 def shortpath(path):
     if path:
@@ -12,5 +13,5 @@ def shortpath(path):
         if terug:
             return terug
         else:
-            return '(file)'     #for soem cases there is no good filename.....
-    return ''
+            return "(file)"  # for soem cases there is no good filename.....
+    return ""

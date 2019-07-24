@@ -51,6 +51,19 @@ Ebbers`_. This fork was
 created in an effort to build a more collaborative community around this
 project.
 
+Quick Start
+-----------
+
+.. code-block:: bash
+
+    $ git clone https://github.com/git-albertomarin/bots
+    $ cd bots
+    $ python3 -m venv .venv; source .venv/bin/activate
+    $ pip install .
+    $ python postinstallation.py --install
+    $ bots-webserver.py
+
+
 Getting Started
 ---------------
 
