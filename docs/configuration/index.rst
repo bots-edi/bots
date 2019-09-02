@@ -11,7 +11,7 @@ Configuration
 
 * ``routes`` are edi-workflows.
 * ``channels`` do the communication (from file system, ftp, etc).
-* each route hs an ``inchannel`` and an ``outchannel``
+* each route has an ``inchannel`` and an ``outchannel``
 * Translations rules determine: translate what to what.
 
 **Most asked configuration topics**
