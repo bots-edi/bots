@@ -107,7 +107,7 @@ class Node(object):
             return self.get(*mpaths)
         elif isinstance(mpaths, list):
             lijst = [self.enhancedget(mpath) for mpath in mpaths]  # go recursive
-            return ''.join(part.strip() for part in lijst if part is not None)
+            return ''.join(str(part).strip() for part in lijst if part is not None)
         elif callable(mpaths):
             return mpaths(thisnode=self)
         elif isinstance(mpaths, basestring):
