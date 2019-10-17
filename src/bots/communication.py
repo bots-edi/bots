@@ -2033,9 +2033,10 @@ class http(_comsession):
         else:
             self.auth = None
         self.cert = None
-        self.url = botslib.Uri(scheme=self.scheme, hostname=self.channeldict[
-                               'host'], port=self.channeldict['port'], path=self.channeldict['path'])
-
+        self.url = botslib.Uri(
+            scheme=self.scheme, hostname=self.channeldict['host'],
+            port=self.channeldict['port'], path=self.channeldict['path'], filename=self.channeldict['filename']
+        )
     @botslib.log_session
     def incommunicate(self):
         startdatetime = datetime.datetime.now()
