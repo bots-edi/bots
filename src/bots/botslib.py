@@ -12,20 +12,14 @@ import platform
 import socket
 import traceback
 import sys
+import pickle
 
-try:
-    import pickle as pickle
-except ImportError:
-    import pickle
-
-if sys.version_info[0] > 2:
-    str = str = str
-
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 
 #bots-modules (no code)
 from . import botsglobal
-from .botsconfig import *
+from .botsconfig import PROCESS, DONE, OK, ERROR, FILEOUT
+
 '''
 Base library for bots. Botslib should not import code from other Bots-modules.
 '''

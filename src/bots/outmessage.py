@@ -4,24 +4,11 @@
 import json as simplejson
 import sys
 import time
-
-if sys.version_info[0] > 2:
-    str = str = str
-try:
-    import cdecimal as decimal
-except ImportError:
-    import decimal
+import decimal
 
 NODECIMAL = decimal.Decimal(1)
-try:
-    from xml.etree import cElementTree as ET
-except ImportError:
-    from xml.etree import ElementTree as ET
-
-try:
-    import elementtree.ElementInclude as ETI
-except ImportError:
-    from xml.etree import ElementInclude as ETI
+from xml.etree import ElementTree as ET
+from xml.etree import ElementInclude as ETI
 
 from collections import OrderedDict
 from django.utils.translation import ugettext as _

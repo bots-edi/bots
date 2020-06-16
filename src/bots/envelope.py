@@ -2,16 +2,14 @@
 
 
 import sys
-if sys.version_info[0] > 2:
-    str = str = str
 import os
 import shutil
-from django.utils.translation import ugettext as _
+from django.utils.translation import gettext as _
 #bots-modules
 from . import botslib
 from . import botsglobal
 from . import outmessage
-from .botsconfig import *
+from .botsconfig import OK, ERROR, DONE, ID, FIELDS
 
 
 def mergemessages(startstatus, endstatus, idroute, rootidta=None):
@@ -200,10 +198,12 @@ class Envelope(object):
         if IDmode == 'ISA_qualifier_GS':
             if len(frompartner) != 3:
                 raise botslib.OutMessageError(
-                    _('In enveloping "frompartner" is expected to have format "%(IDmode)s", but is "%(frompartner)s".'), ta_info)
+                    _('In enveloping "frompartner" is expected to have format "%(IDmode)s", but is "%(frompartner)s".'),
+                    self.ta_info)
             if len(topartner) != 3:
                 raise botslib.OutMessageError(
-                    _('In enveloping "topartner" is expected to have format "%(IDmode)s", but is "%(topartner)s".'), ta_info)
+                    _('In enveloping "topartner" is expected to have format "%(IDmode)s", but is "%(topartner)s".'),
+                    self.ta_info)
             self.ta_info['frompartner_outer'] = frompartner[0]
             self.ta_info['frompartner_qualifier'] = frompartner[1]
             self.ta_info['frompartner_inner'] = frompartner[2]
@@ -213,10 +213,12 @@ class Envelope(object):
         elif IDmode in ['ISA_qualifier', 'UNB_qualifier']:
             if len(frompartner) != 2:
                 raise botslib.OutMessageError(
-                    _('In enveloping "frompartner" is expected to have format "%(IDmode)s", but is "%(frompartner)s".'), ta_info)
+                    _('In enveloping "frompartner" is expected to have format "%(IDmode)s", but is "%(frompartner)s".'),
+                    self.ta_info)
             if len(topartner) != 2:
                 raise botslib.OutMessageError(
-                    _('In enveloping "topartner" is expected to have format "%(IDmode)s", but is "%(topartner)s".'), ta_info)
+                    _('In enveloping "topartner" is expected to have format "%(IDmode)s", but is "%(topartner)s".'),
+                    self.ta_info)
             self.ta_info['frompartner_outer'] = frompartner[0]
             self.ta_info['frompartner_qualifier'] = frompartner[1]
             self.ta_info['frompartner_inner'] = frompartner[0]

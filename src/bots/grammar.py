@@ -1,14 +1,13 @@
 # -*- coding: utf-8 -*-
+from django.utils.translation import gettext as _
 
-
-
-import sys
-if sys.version_info[0] > 2:
-    str = str = str
-from django.utils.translation import ugettext as _
 #bots-modules
 from . import botslib
-from .botsconfig import *
+from .botsconfig import (
+    ISFIELD, SUBFIELDS, ID, MANDATORY, MAXREPEAT, LENGTH, MINLENGTH, FORMAT,
+    DECIMALS, MIN, MAX, MPATH, LEVEL, BOTSIDNR, FIELDS, BFORMAT, FIXED_RECORD_LENGTH
+)
+
 # used in this module to indicate part of grammar is already read and/or has errors
 ERROR_IN_GRAMMAR = 'BOTS_error_1$%3@7#!%+_)_+[{]}'
 #no record should be called like this ;-))

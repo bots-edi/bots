@@ -11,6 +11,7 @@ from django.utils.translation import ugettext as _
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
+
 #bots-modules
 from . import models
 from . import botsglobal
