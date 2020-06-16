@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import unicode_literals
-from __future__ import print_function
+
+
 import sys
 if sys.version_info[0] > 2:
-    basestring = unicode = str
+    str = str = str
     long = int
 import time
 try:
@@ -45,7 +45,7 @@ def parse_edi_file(**ta_info):
         #~ raise botslib.MessageError('')      #UNITTEST_CORRECTION
         content = botslib.get_relevant_text_for_UnicodeError(msg)
         #msg.encoding should contain encoding, but does not (think this is not OK for UNOA, etc)
-        ediobject.errorlist.append(unicode(botslib.InMessageError(_('[A59]: incoming file has not allowed characters at/after file-position %(pos)s: "%(content)s".'),
+        ediobject.errorlist.append(str(botslib.InMessageError(_('[A59]: incoming file has not allowed characters at/after file-position %(pos)s: "%(content)s".'),
                                                                   {'pos': msg.start, 'content': content})))
     except Exception as msg:
         #~ raise botslib.MessageError('')      #UNITTEST_CORRECTION
@@ -874,7 +874,7 @@ class excel(csv):
             raise ImportError(_('Dependency failure: editype "excel" requires python library "xlrd".'))
         import csv as csvlib
         try:
-            import StringIO
+            import io
         except:
             import io as StringIO
 
@@ -898,10 +898,10 @@ class excel(csv):
                                     {'txt': txt})
             raise botslib.InMessageError(_('Excel extraction failed, may not be an Excel file? Error:\n%(txt)s'),
                                          {'txt': txt})
-        rawinputfile = StringIO.StringIO()
+        rawinputfile = io.StringIO()
         csvout = csvlib.writer(rawinputfile, quotechar=self.ta_info['quote_char'], delimiter=self.ta_info[
                                'field_sep'], doublequote=doublequote, escapechar=self.ta_info['escape'])
-        csvout.writerows(map(self.utf8ize, xlsdata))
+        csvout.writerows(list(map(self.utf8ize, xlsdata)))
         rawinputfile.seek(0)
         self.rawinput = rawinputfile.read()
         rawinputfile.close()
@@ -927,7 +927,7 @@ class excel(csv):
         xlsdata = []
         for row in range(sheet.nrows):
             (types, values) = (sheet.row_types(row), sheet.row_values(row))
-            xlsdata.append(map(formatter, zip(types, values)))
+            xlsdata.append(list(map(formatter, list(zip(types, values)))))
         return xlsdata
     #-------------------------------------------------------------------------------
 
@@ -949,14 +949,14 @@ class excel(csv):
         # standard YYYY-MM-DDTHH:MM:SS ISO date.
         (y, m, d, hh, mm, ss) = tupledate
         nonzero = lambda n: n != 0
-        datestring = '%04d-%02d-%02d' % (y, m, d) if filter(nonzero, (y, m, d)) else ''
-        timestring = 'T%02d:%02d:%02d' % (hh, mm, ss) if filter(nonzero, (hh, mm, ss)) or not datestring else ''
+        datestring = '%04d-%02d-%02d' % (y, m, d) if list(filter(nonzero, (y, m, d))) else ''
+        timestring = 'T%02d:%02d:%02d' % (hh, mm, ss) if list(filter(nonzero, (hh, mm, ss))) or not datestring else ''
         return datestring + timestring
     #-------------------------------------------------------------------------------
 
     def utf8ize(self, l):
         # Make string-like things into utf-8, leave other things alone
-        return [unicode(s).encode('utf-8') if hasattr(s, 'encode') else s for s in l]
+        return [str(s).encode('utf-8') if hasattr(s, 'encode') else s for s in l]
 
 
 class edifact(var):
@@ -1180,9 +1180,9 @@ class edifact(var):
                 translationscript, scriptfilename = botslib.botsimport(
                     'mappings', editype, tscript)  # import the mappingscript
             #generate CONTRL-message. One received interchange->one CONTRL-message
-            reference = unicode(botslib.unique('messagecounter'))
+            reference = str(botslib.unique('messagecounter'))
             ta_confirmation = ta_fromfile.copyta(status=TRANSLATED)
-            filename = unicode(ta_confirmation.idta)
+            filename = str(ta_confirmation.idta)
             out = outmessage.outmessage_init(editype=editype, messagetype=tomessagetype,
                                              filename=filename, reference=reference, statust=OK)  # make outmessage object
             out.ta_info['frompartner'] = receiver  # reverse!
@@ -1282,7 +1282,7 @@ class x12(var):
             elif count in [7, 18, 21, 32, 35, 51, 54, 70]:  # extra checks for fixed ISA.
                 if char != self.ta_info['field_sep']:
                     raise botslib.InMessageError(_('[A63]: Non-valid ISA header; position %(pos)s of ISA is "%(foundchar)s", expect here element separator "%(field_sep)s".'),
-                                                 {'pos': unicode(count), 'foundchar': char, 'field_sep': self.ta_info['field_sep']})
+                                                 {'pos': str(count), 'foundchar': char, 'field_sep': self.ta_info['field_sep']})
             elif count == 83:
                 self.ta_info['reserve'] = char
             elif count < 85:
@@ -1425,9 +1425,9 @@ class x12(var):
                     'mappings', editype, tscript)  # import the mappingscript
             #generate 997. For each GS-GE->one 997
             # 20120411: use zfill as messagescounter can be <1000, ST02 field is min 4 positions
-            reference = unicode(botslib.unique('messagecounter')).zfill(4)
+            reference = str(botslib.unique('messagecounter')).zfill(4)
             ta_confirmation = ta_fromfile.copyta(status=TRANSLATED)
-            filename = unicode(ta_confirmation.idta)
+            filename = str(ta_confirmation.idta)
             out = outmessage.outmessage_init(editype=editype, messagetype=tomessagetype,
                                              filename=filename, reference=reference, statust=OK)  # make outmessage object
             out.ta_info['frompartner'] = receiver  # reverse!
@@ -1525,7 +1525,7 @@ class xml(Inmessage):
             parser = ET.XMLParser()
             try:
                 extra_character_entity = getattr(module, 'extra_character_entity')
-                for key, value in extra_character_entity.items():
+                for key, value in list(extra_character_entity.items()):
                     parser.entity[key] = value
             except AttributeError:
                 pass  # there is no extra_character_entity in the mailbag definitions, is OK.
@@ -1547,7 +1547,7 @@ class xml(Inmessage):
         else:
             self.messagegrammarread(typeofgrammarfile='grammars')
             parser = ET.XMLParser()
-            for key, value in self.ta_info['extra_character_entity'].items():
+            for key, value in list(self.ta_info['extra_character_entity'].items()):
                 parser.entity[key] = value
             etree = ET.ElementTree()  # ElementTree: lexes, parses, makes etree; etree is quite similar to bots-node trees but conversion is needed
             etreeroot = etree.parse(filename, parser)
@@ -1560,7 +1560,7 @@ class xml(Inmessage):
     def _handle_empty(self, xmlnode):
         if xmlnode.text:
             xmlnode.text = xmlnode.text.strip()
-        for key, value in xmlnode.items():
+        for key, value in list(xmlnode.items()):
             xmlnode.attrib[key] = value.strip()
         for xmlchildnode in xmlnode:  # for every node in mpathtree
             self._handle_empty(xmlchildnode)
@@ -1575,7 +1575,7 @@ class xml(Inmessage):
                     newnode.record[xmlchildnode.tag] = xmlchildnode.text  # add as a field
                 #convert the xml-attributes of this 'xml-filed' to fields in dict with attributemarker.
                 newnode.record.update(
-                    (xmlchildnode.tag + self.ta_info['attributemarker'] + key, value) for key, value in xmlchildnode.items() if value)
+                    (xmlchildnode.tag + self.ta_info['attributemarker'] + key, value) for key, value in list(xmlchildnode.items()) if value)
             elif entitytype == 1:  # childnode is a record according to grammar
                 # go recursive and add child (with children) as a node/record
                 newnode.append(self._etree2botstree(xmlchildnode))
@@ -1590,7 +1590,7 @@ class xml(Inmessage):
     def _etreenode2botstreenode(self, xmlnode):
         ''' build a basic dict from xml-node. Add BOTSID, xml-attributes (of 'record'), xmlnode.text as BOTSCONTENT.'''
         build = dict((xmlnode.tag + self.ta_info['attributemarker'] + key, value)
-                     for key, value in xmlnode.items() if value)  # convert xml attributes to fields.
+                     for key, value in list(xmlnode.items()) if value)  # convert xml attributes to fields.
         build['BOTSID'] = xmlnode.tag
         if xmlnode.text:
             build['BOTSCONTENT'] = xmlnode.text
@@ -1679,10 +1679,10 @@ class json(Inmessage):
 
     def _dojsonobject(self, jsonobject, name):
         thisnode = node.Node(record={'BOTSID': name})  # initialise empty node.
-        for key, value in jsonobject.items():
+        for key, value in list(jsonobject.items()):
             if value is None:
                 continue
-            elif isinstance(value, basestring):  # json field; map to field in node.record
+            elif isinstance(value, str):  # json field; map to field in node.record
                 ## for generating grammars: empty strings should generate a field
                 if value and not value.isspace():  # use only if string has a value.
                     thisnode.record[key] = value
@@ -1692,13 +1692,13 @@ class json(Inmessage):
                     thisnode.append(newnode)
             elif isinstance(value, list):
                 thisnode.children.extend(self._dojsonlist(value, key))
-            elif isinstance(value, (int, long, float)):  # json field; map to field in node.record
-                thisnode.record[key] = unicode(value)
+            elif isinstance(value, (int, float)):  # json field; map to field in node.record
+                thisnode.record[key] = str(value)
             else:
                 if self.ta_info['checkunknownentities']:
                     raise botslib.InMessageError(_('[J55]: Key "%(key)s" value "%(value)s": is not string, list or dict.'),
                                                  {'key': key, 'value': value})
-                thisnode.record[key] = unicode(value)
+                thisnode.record[key] = str(value)
         if len(thisnode.record) == 2 and not thisnode.children:
             return None  # node is empty...
         #~ thisnode.record['BOTSID']=name

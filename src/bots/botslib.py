@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import unicode_literals
+
 import codecs
 import collections
 import datetime as python_datetime
@@ -14,12 +14,12 @@ import traceback
 import sys
 
 try:
-    import cPickle as pickle
+    import pickle as pickle
 except ImportError:
     import pickle
 
 if sys.version_info[0] > 2:
-    basestring = unicode = str
+    str = str = str
 
 from django.utils.translation import ugettext as _
 
@@ -128,7 +128,7 @@ class NewTransaction(_Transaction):
     ''' Generate new transaction. '''
 
     def __init__(self, **ta_info):
-        updatedict = dict((key, value) for key, value in ta_info.items() if key in self.filterlist)  # filter ta_info
+        updatedict = dict((key, value) for key, value in list(ta_info.items()) if key in self.filterlist)  # filter ta_info
         updatedict['script'] = self.processlist[-1]
         namesstring = ','.join(key for key in updatedict)
         varsstring = ','.join('%(' + key + ')s' for key in updatedict)
@@ -193,7 +193,7 @@ def updateinfocore(change, where, wherestring=''):
     '''
     wherestring = ' WHERE idta > %(rootidta)s AND ' + wherestring
     #change-dict: discard empty values. Change keys: this is needed because same keys can be in where-dict
-    change2 = [(key, value) for key, value in change.items() if value]
+    change2 = [(key, value) for key, value in list(change.items()) if value]
     if not change2:
         return
     changestring = ','.join(key + '=%(change_' + key + ')s' for key, value in change2)
@@ -411,7 +411,7 @@ if sys.version_info[0] > 2:  # safe_unicode
                 #~ print('safe_unicode1',type(value))
                 return str(value)
         except Exception as msg:
-            print('safe_unicode2', msg)
+            print(('safe_unicode2', msg))
             try:
                 return str(repr(value))
             except:
@@ -422,7 +422,7 @@ else:
         '''
         #~ print('safe_unicode00')
         try:
-            if isinstance(value, unicode):  # is already unicode, just return
+            if isinstance(value, str):  # is already unicode, just return
                 return value
             elif isinstance(value, str):  # string/bytecode, encoding unknown.
                 for charset in ['utf_8', 'latin_1']:
@@ -434,11 +434,11 @@ else:
                 return value.decode('utf_8', 'ignore')  # decode as if it is utf-8, ignore errors.
             else:
                 #~ print('safe_unicode11',type(value))
-                return unicode(value)
+                return str(value)
         except Exception as msg:
-            print('safe_unicode22', msg)
+            print(('safe_unicode22', msg))
             try:
-                return unicode(repr(value))
+                return str(repr(value))
             except:
                 return 'Error while displaying error'
 
@@ -769,7 +769,7 @@ def trace_origin(ta, where=None):
             donelijst.append(idta)
             taparent = OldTransaction(idta=idta)
             taparent.synall()
-            for key, value in where.items():
+            for key, value in list(where.items()):
                 if getattr(taparent, key) != value:
                     break
             else:  # all where-criteria are true;
@@ -884,7 +884,7 @@ def settimeout(milliseconds):
 
 def updateunlessset(updatedict, fromdict):
     #~ updatedict.update((key,value) for key, value in fromdict.items() if key not in updatedict) #!!TODO when is this valid? Note: prevents setting charset from gramamr
-    updatedict.update((key, value) for key, value in fromdict.items() if key not in updatedict or not updatedict[
+    updatedict.update((key, value) for key, value in list(fromdict.items()) if key not in updatedict or not updatedict[
                       key])  # !!TODO when is this valid? Note: prevents setting charset from gramamr
 
 
@@ -946,7 +946,7 @@ class Uri(object):
         scheme = self._uri['scheme'] + ':' if self._uri['scheme'] else ''
         password = ':' + self._uri['password'] if self._uri['password'] else ''
         userinfo = self._uri['username'] + password + '@' if self._uri['username'] else ''
-        port = ':' + unicode(self._uri['port']) if self._uri['port'] else ''
+        port = ':' + str(self._uri['port']) if self._uri['port'] else ''
         fullhost = self._uri['hostname'] + port if self._uri['hostname'] else ''
         authority = '//' + userinfo + fullhost if fullhost else ''
         if self._uri['path'] or self._uri['filename']:
@@ -977,7 +977,7 @@ if sys.version_info[0] > 2:
             else:
                 xxx = kwargs
             self.xxx = collections.defaultdict(str)
-            for key, value in xxx.items():
+            for key, value in list(xxx.items()):
                 self.xxx[safe_unicode(key)] = safe_unicode(value)
 
         def __str__(self):
@@ -1005,8 +1005,8 @@ else:
                     xxx = {}
             else:
                 xxx = kwargs
-            self.xxx = collections.defaultdict(unicode)
-            for key, value in xxx.items():
+            self.xxx = collections.defaultdict(str)
+            for key, value in list(xxx.items()):
                 self.xxx[safe_unicode(key)] = safe_unicode(value)
 
         def __unicode__(self):

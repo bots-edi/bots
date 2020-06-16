@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from __future__ import absolute_import, division, print_function, unicode_literals
+
 
 from future import standard_library
 standard_library.install_aliases()
@@ -27,7 +27,7 @@ from bots import botsglobal
 try:
     from xmlrpc.server import SimpleXMLRPCServer  # fails to import on python2  even future is available
 except ImportError:
-    from SimpleXMLRPCServer import SimpleXMLRPCServer
+    from xmlrpc.server import SimpleXMLRPCServer
 
 # if sys.version_info[0] > 2:
 #     basestring = unicode = str
@@ -75,7 +75,7 @@ class Jobqueue(object):
     def clearjobq(self):
         """"""
         self.jobqueue = []
-        self.logger.info(u'Job queue cleared.')
+        self.logger.info('Job queue cleared.')
         return 0
 
     def getjob(self):
@@ -87,17 +87,17 @@ class Jobqueue(object):
     def _sort(self):
         """"""
         self.jobqueue.sort(reverse=True)
-        self.logger.debug(u'Job queue changed. New queue: %(queue)s', {
+        self.logger.debug('Job queue changed. New queue: %(queue)s', {
                           'queue': ''.join(['\n    ' + repr(job) for job in self.jobqueue])})
 
 
 def maxruntimeerror(logger, maxruntime, jobnumber, task_to_run):
     """"""
-    logger.error(u'Job {} exceeded maxruntime of {} minutes'.format(jobnumber, maxruntime))
+    logger.error('Job {} exceeded maxruntime of {} minutes'.format(jobnumber, maxruntime))
 
     botslib.sendbotserrorreport(
-        u'[Bots Job Queue] - Job exceeded maximum runtime',
-        u'Job {} exceeded maxruntime of {} minutes:\n {}'.format(jobnumber, maxruntime, task_to_run))
+        '[Bots Job Queue] - Job exceeded maximum runtime',
+        'Job {} exceeded maxruntime of {} minutes:\n {}'.format(jobnumber, maxruntime, task_to_run))
 
 
 def launcher(logger, queue, lauchfrequency, maxruntime):

@@ -24,7 +24,7 @@ class FilterPersistMiddleware(object):
             referrer = request.META['HTTP_REFERER'].split('?')[0]
             referrer = referrer[referrer.find('/admin'):len(referrer)]
         else:
-            referrer = u''
+            referrer = ''
 
         popup = 'pop=1' in request.META['QUERY_STRING']
         path = request.path

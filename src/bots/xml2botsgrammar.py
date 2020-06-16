@@ -4,8 +4,8 @@
    Usage: c:\python27\python  bots-xml2botsgrammar.py  botssys/infile/test.xml botssys/infile/resultgrammar.py  -cconfig
    Try to have a 'completely filled' xml file.
 """
-from __future__ import print_function
-from __future__ import unicode_literals
+
+
 
 import atexit
 import copy
@@ -66,14 +66,14 @@ class xmlforgrammar(inmessage.Inmessage):
                     newnode.record[xmlchildnode.tag] = '1'  # add as a field
                 #convert the xml-attributes of this 'xml-field' to fields in dict with attributemarker.
                 newnode.record.update((xmlchildnode.tag + self.ta_info['attributemarker'] + key, value)
-                                      for key, value in xmlchildnode.items())
+                                      for key, value in list(xmlchildnode.items()))
         return newnode
 
     def _etreenode2botstreenode(self, xmlnode):
         """Build a OrderedDict from xml-node.
         Add BOTSID, xml-attributes (of 'record'), xmlnode.text as BOTSCONTENT."""
         build = OrderedDict((xmlnode.tag + self.ta_info['attributemarker'] + key, value)
-                            for key, value in xmlnode.items())  # convert xml attributes to fields.
+                            for key, value in list(xmlnode.items()))  # convert xml attributes to fields.
         build['BOTSID'] = xmlnode.tag
         if self._use_botscontent(xmlnode):
             build['BOTSCONTENT'] = '1'
@@ -104,7 +104,7 @@ class xmlforgrammar_allrecords(inmessage.Inmessage):
     def _etreenode2botstreenode(self, xmlnode):
         """ build a OrderedDict from xml-node. Add BOTSID, xml-attributes (of 'record'), xmlnode.text as BOTSCONTENT."""
         build = OrderedDict((xmlnode.tag + self.ta_info['attributemarker'] + key, value)
-                            for key, value in xmlnode.items())  # convert xml attributes to fields.
+                            for key, value in list(xmlnode.items()))  # convert xml attributes to fields.
         build['BOTSID'] = xmlnode.tag
         if not self._is_record(xmlnode):
             build['BOTSCONTENT'] = '1'
@@ -131,7 +131,7 @@ def map_writefields(node_out, node_in, mpath):
     """ als fields of this level are written to node_out.
     """
     mpath_with_all_fields = copy.deepcopy(mpath)  # use a copy of mpath (do not want to change it)
-    for key in node_in.record.keys():
+    for key in list(node_in.record.keys()):
         if key in ['BOTSID', 'BOTSIDnr']:  # skip these
             continue
         mpath_with_all_fields[-1][key] = 'dummy'  # add key to the mpath
@@ -143,7 +143,7 @@ def map_writefields(node_out, node_in, mpath):
 def tree2grammar(node_instance, structure, recorddefs):
     structure.append({ID: node_instance.record['BOTSID'], MIN: 0, MAX: 99999, LEVEL: []})
     recordlist = []
-    for key in node_instance.record.keys():
+    for key in list(node_instance.record.keys()):
         recordlist.append([key, 'C', 256, 'AN'])
     if node_instance.record['BOTSID'] in recorddefs:
         recorddefs[node_instance.record['BOTSID']] = removedoublesfromlist(

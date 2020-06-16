@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from __future__ import print_function
-from __future__ import unicode_literals
+
+
 
 import click
 import os
@@ -19,7 +19,7 @@ def start(configdir):
     This is eg useful for version control.
     """
     botsinit.generalinit(configdir)
-    import pluglib  # import here, import at start of file gives error; first initialize.
+    from . import pluglib  # import here, import at start of file gives error; first initialize.
 
     usersys = botsglobal.ini.get('directories', 'usersysabs')
     index_filename = os.path.join(usersys, 'index.py')

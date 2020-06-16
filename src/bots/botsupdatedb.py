@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import print_function
-from __future__ import unicode_literals
+
+
 
 import atexit
 import click
@@ -11,7 +11,7 @@ import socket
 import sys
 
 if sys.version_info[0] > 2:
-    basestring = unicode = str
+    str = str = str
 
 from django.utils.translation import ugettext as _
 

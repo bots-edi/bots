@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import print_function
-from __future__ import unicode_literals
+
+
 import sys
 if sys.version_info[0] > 2:
-    basestring = unicode = str
+    str = str = str
 from django.utils.translation import ugettext as _
 #bots-modules
 from . import botslib
@@ -86,9 +86,9 @@ def email_error_report(rootidtaofrun):
         break
     else:
         raise botslib.PanicError(_('In generate report: could not find report?'))
-    subject = _('[Bots Error Report] %(time)s') % {'time': unicode(results[str('ts')])[:16]}
+    subject = _('[Bots Error Report] %(time)s') % {'time': str(results[str('ts')])[:16]}
     reporttext = _('Bots Report; type: %(type)s, time: %(time)s\n') % {
-        'type': results[str('type')], 'time': unicode(results[str('ts')])[:19]}
+        'type': results[str('type')], 'time': str(results[str('ts')])[:19]}
     reporttext += _('    %d files received/processed in run.\n') % (results[str('lastreceived')])
     if results[str('lastdone')]:
         reporttext += _('    %d files without errors,\n') % (results[str('lastdone')])
@@ -120,7 +120,7 @@ def email_error_report(rootidtaofrun):
                                         AND statust=%(statust)s ''',
                                      {'rootidtaofrun': rootidtaofrun, 'status': PROCESS, 'statust': ERROR}):
                 reporttext += '\nProcess error:\n'
-                for key in row.keys():
+                for key in list(row.keys()):
                     reporttext += '%s: %s\n' % (key, row[key])
         # Include details about file errors in the email report; if debug is True: includes trace
         if results[str('lasterror')] or results[str('lastopen')] or results[str('lastok')]:
@@ -130,7 +130,7 @@ def email_error_report(rootidtaofrun):
                                         AND statust!=%(statust)s ''',
                                      {'rootidtaofrun': rootidtaofrun, 'statust': DONE}):
                 reporttext += '\nFile error:\n'
-                for key in row.keys():
+                for key in list(row.keys()):
                     reporttext += '%s: %s\n' % (key, row[key])
 
         botslib.sendbotserrorreport(subject, reporttext)

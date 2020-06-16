@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ''' Bots configuration for django's admin site.'''
-from __future__ import unicode_literals
+
 from django import forms
 try:
     from django.forms import util as django_forms_util

@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import unicode_literals
+
 import sys
 if sys.version_info[0] > 2:
-    basestring = unicode = str
+    str = str = str
     import configparser as ConfigParser
 else:
-    import ConfigParser
+    import configparser
 import os
 import encodings
 import codecs
@@ -18,13 +18,13 @@ from . import botslib
 from . import node
 
 
-class BotsConfig(ConfigParser.RawConfigParser):
+class BotsConfig(configparser.RawConfigParser):
     ''' As ConfigParser, but with defaults.
     '''
 
     def get(self, section, option, default='', **kwargs):
         if self.has_option(section, option):
-            return ConfigParser.RawConfigParser.get(self, section, option)
+            return configparser.RawConfigParser.get(self, section, option)
         elif default == '':
             raise botslib.BotsError('No entry "%(option)s" in section "%(section)s" in "bots.ini".', {
                                     'option': option, 'section': section})
@@ -33,13 +33,13 @@ class BotsConfig(ConfigParser.RawConfigParser):
 
     def getint(self, section, option, default, **kwargs):
         if self.has_option(section, option):
-            return ConfigParser.RawConfigParser.getint(self, section, option)
+            return configparser.RawConfigParser.getint(self, section, option)
         else:
             return default
 
     def getboolean(self, section, option, default, **kwargs):
         if self.has_option(section, option):
-            return ConfigParser.RawConfigParser.getboolean(self, section, option)
+            return configparser.RawConfigParser.getboolean(self, section, option)
         else:
             return default
 
@@ -145,7 +145,7 @@ def initbotscharsets():
     #eg: 'checkcharsetin':'botsreplace',  #strict, ignore or botsreplace
     # in case of errors: the 'wrong' character is replaced with char as set in
     # bots.ini. Default value in bots.ini is ' ' (space)
-    botsglobal.botsreplacechar = unicode(botsglobal.ini.get('settings', 'botsreplacechar', ' '))
+    botsglobal.botsreplacechar = str(botsglobal.ini.get('settings', 'botsreplacechar', ' '))
     codecs.register_error('botsreplace', botsreplacechar_handler)  # need to register the handler for botsreplacechar
     #set aliases for the charsets in bots.ini
     for key, value in botsglobal.ini.items('charsets'):

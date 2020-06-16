@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from __future__ import print_function
-from __future__ import unicode_literals
+
+
 
 try:
     from cheroot.server import get_ssl_adapter_class
@@ -24,7 +24,7 @@ from . import botsglobal
 from . import botsinit
 
 if sys.version_info[0] > 2:
-    basestring = unicode = str
+    str = str = str
 
 
 @click.command()

@@ -16,7 +16,7 @@ import sys
 if sys.version_info[0] > 2:
     import builtins
 else:
-    import __builtin__ as builtins
+    import builtins as builtins
 import keyword
 import tokenize
 import cgi

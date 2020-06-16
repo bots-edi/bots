@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import unicode_literals
-from __future__ import print_function
+
+
 import sys
 if sys.version_info[0] > 2:
-    basestring = unicode = str
+    str = str = str
 import os
 import time
 import shutil
@@ -473,7 +473,7 @@ def logfiler(request, *kw, **kwargs):
             with open(logf) as f:
                 logdata = f.read()
         except:
-            logdata = _(u'No such file %s' % logf)
+            logdata = _('No such file %s' % logf)
 
         if 'action' in request.GET and request.GET['action'] == 'download':
             response = django.http.HttpResponse(content_type='text/log')
@@ -500,7 +500,7 @@ def plugin(request, *kw, **kwargs):
                     if pluglib.read_plugin(request.FILES['file'].temporary_file_path()):
                         messages.add_message(request, messages.INFO, _('Overwritten existing files.'))
                 except Exception as msg:
-                    notification = _('Error reading plugin: "%s".') % unicode(msg)
+                    notification = _('Error reading plugin: "%s".') % str(msg)
                     botsglobal.logger.error(notification)
                     messages.add_message(request, messages.INFO, notification)
                 else:
@@ -525,7 +525,7 @@ def plugin_index(request, *kw, **kwargs):
             try:
                 pluglib.read_index('index')
             except Exception as msg:
-                notification = _('Error reading configuration index file: "%s".') % unicode(msg)
+                notification = _('Error reading configuration index file: "%s".') % str(msg)
                 botsglobal.logger.error(notification)
                 messages.add_message(request, messages.INFO, notification)
             else:
@@ -544,7 +544,7 @@ def plugout_index(request, *kw, **kwargs):
                 'settings', 'codelists_in_plugin', True), 'databasetransactions': False}
             pluglib.make_index(dummy_for_cleaned_data, filename)
         except Exception as msg:
-            notification = _('Error writing configuration index file: "%s".') % unicode(msg)
+            notification = _('Error writing configuration index file: "%s".') % str(msg)
             botsglobal.logger.error(notification)
             messages.add_message(request, messages.INFO, notification)
         else:
@@ -578,7 +578,7 @@ def plugout_backup_core(request, *kw, **kwargs):
                                   }
         pluglib.make_plugin(dummy_for_cleaned_data, filename)
     except Exception as msg:
-        notification = 'Error writing backup plugin: "%s".' % unicode(msg)
+        notification = 'Error writing backup plugin: "%s".' % str(msg)
         botsglobal.logger.error(notification)
         messages.add_message(request, messages.INFO, notification)
     else:
@@ -600,8 +600,8 @@ def plugout(request, *kw, **kwargs):
                 try:
                     pluglib.make_plugin(form.cleaned_data, filename)
                 except botslib.PluginError as msg:
-                    botsglobal.logger.error(unicode(msg))
-                    messages.add_message(request, messages.INFO, unicode(msg))
+                    botsglobal.logger.error(str(msg))
+                    messages.add_message(request, messages.INFO, str(msg))
                 else:
                     botsglobal.logger.info(_('Plugin "%(file)s" created successful.'), {'file': filename})
                     response = django.http.HttpResponse(open(filename, 'rb').read(), content_type='application/zip')
@@ -745,13 +745,13 @@ def runengine(request, *kw, **kwargs):
         #either bots-engine is run directly or via jobqueue-server:
         # run bots-engine via jobqueue-server; reports back if job is queued
         if botsglobal.ini.getboolean('jobqueue', 'enabled', False):
-            import job2queue
+            from . import job2queue
             terug = job2queue.send_job_to_jobqueue(lijst)
             messages.add_message(request, messages.INFO, job2queue.JOBQUEUEMESSAGE2TXT[terug])
             botsglobal.logger.info(job2queue.JOBQUEUEMESSAGE2TXT[terug])
         else:  # run bots-engine direct.; reports back if bots-engien is started succesful. **not reported: problems with running.
             botsglobal.logger.info(_('Run bots-engine with parameters: "%(parameters)s"'),
-                                   {'parameters': unicode(lijst)})
+                                   {'parameters': str(lijst)})
             #first check if another instance of bots-engine is running/if port is free
             try:
                 engine_socket = botslib.check_if_other_engine_is_running()

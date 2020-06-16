@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import unicode_literals
+
 import sys
 if sys.version_info[0] > 2:
-    basestring = unicode = str
+    str = str = str
     from urllib.parse import quote as urllib_quote
 else:
-    from urllib import quote as urllib_quote
+    from urllib.parse import quote as urllib_quote
 import os
 import re
 from django.db import models
@@ -170,7 +170,7 @@ class StripCharField(models.CharField):
     def get_prep_value(self, value, *args, **kwargs):
         ''' Convert Python objects (value) to query values (returned)
         '''
-        if isinstance(value, basestring):
+        if isinstance(value, str):
             return value.strip()
         else:
             return value
@@ -244,7 +244,7 @@ class confirmrule(models.Model):
     rsrv2 = models.IntegerField(null=True)  # added 20100501
 
     def __str__(self):
-        return unicode(self.confirmtype) + ' ' + unicode(self.ruletype)
+        return str(self.confirmtype) + ' ' + str(self.ruletype)
 
     class Meta:
         db_table = 'confirmrule'
@@ -259,7 +259,7 @@ class ccodetrigger(models.Model):
     ccodeid_desc = models.TextField(blank=True, null=True, verbose_name=_('Description'))
 
     def __str__(self):
-        return unicode(self.ccodeid)
+        return str(self.ccodeid)
 
     class Meta:
         db_table = 'ccodetrigger'
@@ -283,7 +283,7 @@ class ccode(models.Model):
     attr8 = StripCharField(max_length=35, blank=True)
 
     def __str__(self):
-        return unicode(self.ccodeid) + ' ' + unicode(self.leftcode) + ' ' + unicode(self.rightcode)
+        return str(self.ccodeid) + ' ' + str(self.leftcode) + ' ' + str(self.rightcode)
 
     class Meta:
         db_table = 'ccode'
@@ -399,7 +399,7 @@ class partner(models.Model):
         db_table = 'partner'
 
     def __str__(self):
-        return unicode(self.idpartner) + ' (' + unicode(self.name) + ')'
+        return str(self.idpartner) + ' (' + str(self.name) + ')'
 
     def save(self, *args, **kwargs):
         if isinstance(self, partnergroep):
@@ -435,7 +435,7 @@ class chanpar(models.Model):
         verbose_name_plural = _('email address per channel')
 
     def __str__(self):
-        return unicode(self.idpartner) + ' ' + unicode(self.idchannel) + ' ' + unicode(self.mail)
+        return str(self.idpartner) + ' ' + str(self.idchannel) + ' ' + str(self.mail)
 
 
 @python_2_unicode_compatible
@@ -485,7 +485,7 @@ class translate(models.Model):
         ordering = ['fromeditype', 'frommessagetype', 'frompartner', 'topartner', 'alt']
 
     def __str__(self):
-        return unicode(self.fromeditype) + ' ' + unicode(self.frommessagetype) + ' ' + unicode(self.alt) + ' ' + unicode(self.frompartner) + ' ' + unicode(self.topartner)
+        return str(self.fromeditype) + ' ' + str(self.frommessagetype) + ' ' + str(self.alt) + ' ' + str(self.frompartner) + ' ' + str(self.topartner)
 
 
 @python_2_unicode_compatible
@@ -551,7 +551,7 @@ class routes(models.Model):
         ordering = ['idroute', 'seq']
 
     def __str__(self):
-        return unicode(self.idroute) + ' ' + unicode(self.seq)
+        return str(self.idroute) + ' ' + str(self.seq)
 
     def translt(self):
         if self.translateind == 0:

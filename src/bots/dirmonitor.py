@@ -8,8 +8,8 @@ runs as a daemon/service.
 this module contains separate implementations for linux and windows
 """
 
-from __future__ import print_function
-from __future__ import unicode_literals
+
+
 
 import click
 import fnmatch

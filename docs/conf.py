@@ -7,7 +7,7 @@ Note that not all possible configuration values are present in this autogenerate
 All configuration values have a default; values that are commented out serve to show the default.
 """
 
-from __future__ import absolute_import, division, print_function, unicode_literals
+
 
 import datetime
 import os.path
@@ -90,9 +90,9 @@ master_doc = 'index'
 
 current_year = datetime.datetime.now().year
 short_name = 'bots'
-author = u'Henk-Jan Ebbers'
-project = u'Bots EDI Translator'
-copyright = u'2007 - {}, {}'.format(current_year, author)
+author = 'Henk-Jan Ebbers'
+project = 'Bots EDI Translator'
+copyright = '2007 - {}, {}'.format(current_year, author)
 
 
 # The version info for the project you're documenting, acts as replacement for
@@ -268,11 +268,11 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'bots.tex', u'Bots EDI Translator Documentation', u'henk-jan ebbers', 'manual'),
+    (master_doc, 'bots.tex', 'Bots EDI Translator Documentation', 'henk-jan ebbers', 'manual'),
     ]
 
 latex_documents = [
-    ('index', '{}.tex'.format(short_name), u'Documentation {}'.format(short_name), author, 'howto'),
+    ('index', '{}.tex'.format(short_name), 'Documentation {}'.format(short_name), author, 'howto'),
     ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -302,7 +302,7 @@ latex_logo = 'images/botslogo_square2.png'
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, short_name, u'Bots EDI Translator Documentation',
+    (master_doc, short_name, 'Bots EDI Translator Documentation',
      [author], 1)
     ]
 
@@ -320,7 +320,7 @@ texinfo_documents = [
      'bots', 'One line description of project.', 'Miscellaneous'),
     ]
 
-u'Bots EDI Translator Documentation'
+'Bots EDI Translator Documentation'
 
 # Documents to append as an appendix to all manuals.
 #texinfo_appendices = []

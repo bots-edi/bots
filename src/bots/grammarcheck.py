@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import print_function
-from __future__ import unicode_literals
+
+
 import sys
 if sys.version_info[0] > 2:
-    basestring = unicode = str
+    str = str = str
 import os
 import atexit
 import glob
@@ -79,7 +79,7 @@ def start():
                 p1, p2 = os.path.split(arg)
                 editype = os.path.basename(p1)
                 messagetype, ext = os.path.splitext(p2)
-                messagetype = unicode(messagetype)
+                messagetype = str(messagetype)
                 print('grammarcheck', editype, messagetype)
             elif not editype:
                 editype = arg

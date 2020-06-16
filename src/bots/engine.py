@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from __future__ import print_function
-from __future__ import unicode_literals
+
+
 import sys
 if sys.version_info[0] > 2:
-    basestring = unicode = str
+    str = str = str
 
 import atexit
 import click
@@ -217,7 +217,7 @@ def start(configdir, new, resend, rereceive, automaticretrycommunication, do_cle
             if routestorun:
                 use_routestorun = routestorun[:]
                 botsglobal.logger.info(
-                    _('Run routes from command line: "%(routes)s".'), {'routes': unicode(use_routestorun)})
+                    _('Run routes from command line: "%(routes)s".'), {'routes': str(use_routestorun)})
             elif command == 'new':  # fetch all active routes from database unless 'not in default run' or not active.
                 use_routestorun = []
                 for row in botslib.query(
@@ -230,7 +230,7 @@ def start(configdir, new, resend, rereceive, automaticretrycommunication, do_cle
                     use_routestorun.append(row[str('idroute')])
 
                 botsglobal.logger.info(
-                    _('Run active routes from database that are in default run: "%(routes)s".'), {'routes': unicode(use_routestorun)})
+                    _('Run active routes from database that are in default run: "%(routes)s".'), {'routes': str(use_routestorun)})
             else:  # for command other than 'new': use all active routes.
                 use_routestorun = []
                 for row in botslib.query(
@@ -242,7 +242,7 @@ def start(configdir, new, resend, rereceive, automaticretrycommunication, do_cle
                     use_routestorun.append(row[str('idroute')])
 
                 botsglobal.logger.info(
-                    _('Run all active routes from database: "%(routes)s".'), {'routes': unicode(use_routestorun)})
+                    _('Run all active routes from database: "%(routes)s".'), {'routes': str(use_routestorun)})
 
             # run routes for this command
             botslib.tryrunscript(userscript, scriptname, 'pre' + command, routestorun=use_routestorun)
@@ -256,12 +256,12 @@ def start(configdir, new, resend, rereceive, automaticretrycommunication, do_cle
         try:  # in acceptance tests: run a user script. no good reporting of errors/results in post-test script. Reason: this is after automaticmaintence.
             botslib.tryrunscript(acceptance_userscript, acceptance_scriptname, 'posttest', routestorun=use_routestorun)
         except Exception as msg:
-            print(unicode(msg))
+            print(str(msg))
 
         cleanup_.cleanup(do_cleanup, userscript, scriptname)
     except Exception as msg:
         # of course this 'should' not happen.
-        botsglobal.logger.exception(_('Severe error in bots system:\n%(msg)s'), {'msg': unicode(msg)})
+        botsglobal.logger.exception(_('Severe error in bots system:\n%(msg)s'), {'msg': str(msg)})
         sys.exit(1)
     else:
         if errorinrun:
