@@ -23,12 +23,12 @@ def start():
     print('Installation of bots open source edi translator.')
     #python version dependencies
     version = str(sys.version_info[0]) + str(sys.version_info[1])
-    if version == '26':
+    if version == '34':
         pass
-    elif version == '27':
+    elif version == '35':
         pass
     else:
-        raise Exception('Wrong python version, use python 2.6.* or 2.7.*')
+        raise Exception('Wrong python version, use python 3.4 or 3.5')
 
     botsdir = os.path.dirname(botsglobal.__file__)
     print('    Installed bots in "%s".'%(botsdir))

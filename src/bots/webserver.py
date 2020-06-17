@@ -1,9 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-
-
-
 try:
     from cheroot.server import get_ssl_adapter_class
     from cheroot.wsgi import WSGIServer as wsgiserver
@@ -17,6 +14,7 @@ import cherrypy
 import click
 import sys
 
+from django.utils.html_parser import HTMLParseError
 from django.core.handlers.wsgi import WSGIHandler
 from django.utils.translation import ugettext as _
 

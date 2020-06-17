@@ -13,10 +13,10 @@ services:
       dockerfile: ./compose/bots_py34/Dockerfile
     ports:
       - "0.0.0.0:8080:8080"
-  bots27:
+  bots35:
     build:
       context: .
-      dockerfile: ./compose/bots_py27/Dockerfile
+      dockerfile: ./compose/bots_py35/Dockerfile
     ports:
       - "0.0.0.0:8081:8080"
 

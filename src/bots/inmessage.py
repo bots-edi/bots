@@ -1,11 +1,6 @@
 # -*- coding: utf-8 -*-
 
 
-
-import sys
-if sys.version_info[0] > 2:
-    str = str = str
-    long = int
 import time
 try:
     from xml.etree import cElementTree as ET
@@ -13,6 +8,7 @@ except ImportError:
     from xml.etree import ElementTree as ET
 import json as simplejson
 from django.utils.translation import ugettext as _
+
 #bots-modules
 from . import botslib
 from . import botsglobal

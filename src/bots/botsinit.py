@@ -2,11 +2,7 @@
 
 
 import sys
-if sys.version_info[0] > 2:
-    str = str = str
-    import configparser as ConfigParser
-else:
-    import configparser
+import configparser
 import os
 import encodings
 import codecs

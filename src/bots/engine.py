@@ -4,9 +4,6 @@
 
 
 import sys
-if sys.version_info[0] > 2:
-    str = str = str
-
 import atexit
 import click
 import os
