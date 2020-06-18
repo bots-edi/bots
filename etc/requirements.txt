@@ -4,3 +4,4 @@ Django==1.7.11
 future==0.16.0
 six==1.10.0
 xlrd==1.0.0
+psycopg2
