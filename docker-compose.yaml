@@ -1,4 +1,4 @@
-version: '2'
+version: '3'
 
 # Purpose is to test compatibility in Python 2.7 and Python 3.4
 # TODO: add tests
