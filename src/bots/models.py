@@ -14,7 +14,7 @@ from django.utils.translation import ugettext_lazy as _  # django 1.7: have to u
 #~ from django.core.validators import validate_email
 from django.core.validators import validate_integer
 from django.core.exceptions import ValidationError
-from django.utils.encoding import python_2_unicode_compatible
+from six import python_2_unicode_compatible
 from . import botsglobal
 from . import validate_email
 ''' Declare database tabels.

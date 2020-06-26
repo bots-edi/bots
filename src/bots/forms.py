@@ -30,7 +30,7 @@ class View(django.forms.Form):
 class SelectReports(Select):
     template = 'bots/selectform.html'
     action = '/reports/'
-    status = django.forms.ChoiceField([models.DEFAULT_ENTRY, ('1', 'Error'), ('0', 'Done')], required=False, initial='')
+    status = django.forms.ChoiceField(choices=[models.DEFAULT_ENTRY, ('1', 'Error'), ('0', 'Done')], required=False, initial='')
 
 
 class ViewReports(View):
@@ -42,16 +42,16 @@ class ViewReports(View):
 class SelectIncoming(Select):
     template = 'bots/selectform.html'
     action = '/incoming/'
-    statust = django.forms.ChoiceField([models.DEFAULT_ENTRY, ('1', 'Error'),
+    statust = django.forms.ChoiceField(choice=[models.DEFAULT_ENTRY, ('1', 'Error'),
                                         ('3', 'Done')], required=False, initial='')
-    idroute = django.forms.ChoiceField([], required=False, initial='')
-    fromchannel = django.forms.ChoiceField([], required=False)
-    frompartner = django.forms.ChoiceField([], required=False)
-    topartner = django.forms.ChoiceField([], required=False)
-    ineditype = django.forms.ChoiceField(models.EDITYPESLIST, required=False)
-    inmessagetype = django.forms.ChoiceField([], required=False)
-    outeditype = django.forms.ChoiceField(models.EDITYPESLIST, required=False)
-    outmessagetype = django.forms.ChoiceField([], required=False)
+    idroute = django.forms.ChoiceField(choice=[], required=False, initial='')
+    fromchannel = django.forms.ChoiceField(choice=[], required=False)
+    frompartner = django.forms.ChoiceField(choice=[], required=False)
+    topartner = django.forms.ChoiceField(choice=[], required=False)
+    ineditype = django.forms.ChoiceField(choice=models.EDITYPESLIST, required=False)
+    inmessagetype = django.forms.ChoiceField(choice=[], required=False)
+    outeditype = django.forms.ChoiceField(choice=models.EDITYPESLIST, required=False)
+    outmessagetype = django.forms.ChoiceField(choice=[], required=False)
     infilename = django.forms.CharField(required=False, label='Filename', max_length=70)
     lastrun = django.forms.BooleanField(required=False, initial=False)
 
@@ -86,10 +86,10 @@ class SelectDocument(Select):
     action = '/document/'
     status = django.forms.TypedChoiceField(
         [(0, '---------'), (320, _('Document-in')), (330, _('Document-out'))], required=False, initial=0, coerce=int)
-    idroute = django.forms.ChoiceField([], required=False, initial='')
-    frompartner = django.forms.ChoiceField([], required=False)
-    topartner = django.forms.ChoiceField([], required=False)
-    editype = django.forms.ChoiceField(models.EDITYPESLIST, required=False)
+    idroute = django.forms.ChoiceField(choice=[], required=False, initial='')
+    frompartner = django.forms.ChoiceField(choice=[], required=False)
+    topartner = django.forms.ChoiceField(choice=[], required=False)
+    editype = django.forms.ChoiceField(choice=models.EDITYPESLIST, required=False)
     messagetype = django.forms.ChoiceField(required=False)
     lastrun = django.forms.BooleanField(required=False, initial=False)
     reference = django.forms.CharField(required=False, label='Reference', max_length=70)
@@ -118,13 +118,13 @@ class ViewDocument(View):
 class SelectOutgoing(Select):
     template = 'bots/selectform.html'
     action = '/outgoing/'
-    statust = django.forms.ChoiceField([models.DEFAULT_ENTRY, ('1', 'Error'),
+    statust = django.forms.ChoiceField(choice=[models.DEFAULT_ENTRY, ('1', 'Error'),
                                         ('3', 'Done'), ('4', 'Resend')], required=False, initial='')
-    idroute = django.forms.ChoiceField([], required=False, initial='')
-    tochannel = django.forms.ChoiceField([], required=False)
-    frompartner = django.forms.ChoiceField([], required=False)
-    topartner = django.forms.ChoiceField([], required=False)
-    editype = django.forms.ChoiceField(models.EDITYPESLIST, required=False)
+    idroute = django.forms.ChoiceField(choice=[], required=False, initial='')
+    tochannel = django.forms.ChoiceField(choice=[], required=False)
+    frompartner = django.forms.ChoiceField(choice=[], required=False)
+    topartner = django.forms.ChoiceField(choice=[], required=False)
+    editype = django.forms.ChoiceField(choice=models.EDITYPESLIST, required=False)
     messagetype = django.forms.ChoiceField(required=False)
     filename = django.forms.CharField(required=False, label='Filename', max_length=256)
     lastrun = django.forms.BooleanField(required=False, initial=False)
@@ -155,7 +155,7 @@ class ViewOutgoing(View):
 class SelectProcess(Select):
     template = 'bots/selectform.html'
     action = '/process/'
-    idroute = django.forms.ChoiceField([], required=False, initial='')
+    idroute = django.forms.ChoiceField(choice=[], required=False, initial='')
     lastrun = django.forms.BooleanField(required=False, initial=False)
 
     def __init__(self, *args, **kwargs):
@@ -173,16 +173,16 @@ class ViewProcess(View):
 class SelectConfirm(Select):
     template = 'bots/selectform.html'
     action = '/confirm/'
-    confirmtype = django.forms.ChoiceField(models.CONFIRMTYPELIST, required=False, initial='0')
-    confirmed = django.forms.ChoiceField([('0', 'All runs'), ('1', 'Current run'),
+    confirmtype = django.forms.ChoiceField(choice=models.CONFIRMTYPELIST, required=False, initial='0')
+    confirmed = django.forms.ChoiceField(choice=[('0', 'All runs'), ('1', 'Current run'),
                                           ('2', 'Last run')], required=False, initial='0')
-    idroute = django.forms.ChoiceField([], required=False, initial='')
-    editype = django.forms.ChoiceField(models.EDITYPESLIST, required=False)
-    messagetype = django.forms.ChoiceField([], required=False)
-    frompartner = django.forms.ChoiceField([], required=False)
-    topartner = django.forms.ChoiceField([], required=False)
-    fromchannel = django.forms.ChoiceField([], required=False)
-    tochannel = django.forms.ChoiceField([], required=False)
+    idroute = django.forms.ChoiceField(choice=[], required=False, initial='')
+    editype = django.forms.ChoiceField(choice=models.EDITYPESLIST, required=False)
+    messagetype = django.forms.ChoiceField(choice=[], required=False)
+    frompartner = django.forms.ChoiceField(choice=[], required=False)
+    topartner = django.forms.ChoiceField(choice=[], required=False)
+    fromchannel = django.forms.ChoiceField(choice=[], required=False)
+    tochannel = django.forms.ChoiceField(choice=[], required=False)
 
     def __init__(self, *args, **kwargs):
         super(SelectConfirm, self).__init__(*args, **kwargs)
