@@ -107,3 +107,10 @@ coverage.xml
 # virtualenv
 venv/
 ENV/
+
+#vscode
+.vscode/
+
+#nix
+_build/
+
