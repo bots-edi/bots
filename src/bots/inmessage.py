@@ -21,6 +21,9 @@ from . import message
 from . import node
 from . import grammar
 from .botsconfig import *
+from avro.datafile import DataFileReader
+from avro.io import DatumReader
+from collections import OrderedDict
 ''' Reading/lexing/parsing/splitting an edifile.'''
 
 
@@ -1713,6 +1716,48 @@ class jsonnocheck(json):
     def _getrootid(self):
         return self.ta_info['defaultBOTSIDroot']  # as there is no structure in grammar, use value form syntax.
 
+
+class avro(json):
+
+    def initfromfile(self):
+        self.messagegrammarread(typeofgrammarfile='grammars')
+        self._readcontent_edifile()
+
+        jsonobject = self.rawinput
+        if isinstance(jsonobject, list):
+            self.root = node.Node()  # initialise empty node.
+            self.root.children = self._dojsonlist(jsonobject, self._getrootid())  # fill root with children
+            for child in self.root.children:
+                if not child.record:  # sanity test: the children must have content
+                    raise botslib.InMessageError(_('[J51]: No usable content.'))
+                self.checkmessage(child, self.defmessage)
+                self.ta_info.update(child.queries)
+        elif isinstance(jsonobject, dict):
+            if len(jsonobject) == 1 and isinstance(list(jsonobject.values())[0], dict):
+                # best structure: {rootid:{id2:<dict, list>}}
+                self.root = self._dojsonobject(list(jsonobject.values())[0], list(jsonobject.keys())[0])
+            elif len(jsonobject) == 1 and isinstance(list(jsonobject.values())[0], list):
+                #root dict has no name; use value from grammar for rootID; {id2:<dict, list>}
+                self.root = node.Node(record={'BOTSID': self._getrootid()})  # initialise empty node.
+                self.root.children = self._dojsonlist(list(jsonobject.values())[0], list(jsonobject.keys())[0])
+            else:
+                self.root = self._dojsonobject(jsonobject, self._getrootid())
+            if not self.root:
+                raise botslib.InMessageError(_('[J52]: No usable content.'))
+            self.checkmessage(self.root, self.defmessage)
+            self.ta_info.update(self.root.queries)
+        else:
+            #root in JSON is neither dict or list.
+            raise botslib.InMessageError(_('[J53]: Content must be a "list" or "object".'))
+
+    def _readcontent_edifile(self):
+        ''' read content of edi file to memory.
+        '''
+        botsglobal.logger.debug('Read edi file "%(filename)s".', self.ta_info)
+        reader = DataFileReader(botslib.opendata_bin(self.ta_info['filename'], "rb"), DatumReader())
+        self.rawinput = next(reader)
+        reader.close()
+        
 
 class db(Inmessage):
     ''' For database connector: reading from database.

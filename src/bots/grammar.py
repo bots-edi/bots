@@ -1045,6 +1045,55 @@ class jsonnocheck(json):
         'stripfield_sep': False,
         }
 
+class avro(Grammar):
+    defaultsyntax = {
+        'charset': None,
+        'checkcharsetin': 'strict',  # strict, ignore or botsreplace (replace with char as set in bots.ini).
+        'checkcharsetout': 'strict',  # strict, ignore or botsreplace (replace with char as set in bots.ini).
+        'checkunknownentities': True,
+        'contenttype': 'application/text',
+        'decimaal': '.',
+        'defaultBOTSIDroot': 'ROOT',
+        'envelope': '',
+        'indented': False,  # False:  output is one string (no cr/lf); True:  output is indented/human readable
+        'merge': False,
+        'triad': '',
+        #settings needed as defaults, but not useful for this editype
+        'add_crlfafterrecord_sep': '',
+        'escape': '',
+        'field_sep': '',
+        'forcequote': 0,  # csv only
+        'quote_char': '',
+        'record_sep': '',
+        'record_tag_sep': '',  # Tradacoms/GTDI
+        'reserve': '',
+        'sfield_sep': '',
+        'skip_char': '',
+        #bots internal, never change/overwrite
+        'has_structure': True,  # is True, read structure, recorddef, check these
+        'checkcollision': False,
+        'lengthnumericbare': False,
+        'stripfield_sep': False,
+        }
+
+    formatconvert = {
+        'A': 'A',  # alfanumerical
+        'AN': 'A',  # alfanumerical
+        #~ 'AR':'A',       #right aligned alfanumerical field, used in fixed records.
+        'D': 'D',  # date
+        'DT': 'D',  # date-time
+        'T': 'T',  # time
+        'TM': 'T',  # time
+        'N': 'N',  # numerical, fixed decimal. Fixed nr of decimals; if no decimal used: whole number, integer
+        #~ 'NL':'N',       #numerical, fixed decimal. In fixed format: no preceding zeros, left aligned,
+        #~ 'NR':'N',       #numerical, fixed decimal. In fixed format: preceding blancs, right aligned,
+        'R': 'R',  # numerical, any number of decimals; the decimal point is 'floating'
+        #~ 'RL':'R',       #numerical, any number of decimals. fixed: no preceding zeros, left aligned
+        #~ 'RR':'R',       #numerical, any number of decimals. fixed: preceding blancs, right aligned
+        'I': 'I',  # numercial, implicit decimal
+        'B': 'A',
+        }
+
 
 class tradacoms(Grammar):
     defaultsyntax = {

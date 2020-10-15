@@ -5,7 +5,7 @@ from __future__ import unicode_literals
 import sys
 import subprocess
 import logging
-import utilsunit
+import tests.utilsunit
 import bots.botslib as botslib
 import bots.botsinit as botsinit
 import bots.botsglobal as botsglobal

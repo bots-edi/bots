@@ -34,6 +34,10 @@ from . import grammar
 from . import node
 from .botsconfig import *
 
+#avro
+import avro.schema as avroschema
+from avro.datafile import DataFileWriter
+from avro.io import DatumReader, DatumWriter
 
 def outmessage_init(**ta_info):
     ''' dispatch function class Outmessage or subclass
@@ -860,6 +864,51 @@ class jsonnocheck(json):
         del newjsonobject['BOTSIDnr']
         return newjsonobject
 
+class avro(json):
+
+    def _write(self, node_instance):
+        ''' convert node tree to appropriate python object.
+            python objects are written to json by simplejson.
+        '''
+        avroobject = dict({node_instance.record['BOTSID']: self._node2json(node_instance)})
+        schema = avroschema.parse(botslib.readdata_bin('usersys/grammars/avro/' + self.ta_info['messagetype'] + '.avsc'))
+        writer = DataFileWriter(self._outstream, DatumWriter(), schema)
+        writer.append(avroobject)
+        writer.close()
+
+    def _node2json(self, node_instance):
+        ''' recursive method.
+        '''
+        #newavroobject is the json object assembled in the function.
+        newavroobject = node_instance.record.copy()  # init newavroobject with record fields from node
+        recordtag = newavroobject['BOTSID']
+        for field_definition in self.defmessage.recorddefs[recordtag]:  # loop over fields in grammar
+            value = newavroobject.get(field_definition[ID])
+            if value is None:  # None-values are not used
+                continue
+            else: 
+                newavroobject[field_definition[ID]] = self._convertField(value, field_definition)
+        for childnode in node_instance.children:  # fill newjsonobject with the lex_records from childnodes.
+            key = childnode.record['BOTSID']
+            if key in newjsonobject:
+                newavroobject[key].append(self._node2json(childnode))
+            else:
+                newavroobject[key] = [self._node2json(childnode)]
+        del newavroobject['BOTSID']
+        try:
+            del newavroobject['BOTSIDnr']
+        except:
+            pass
+        return newavroobject
+
+    def _convertField(self, value, field_definition):
+        if field_definition[BFORMAT] == 'N' and field_definition[DECIMALS] == 0:
+            return int(value) 
+        if field_definition[BFORMAT] == 'R':
+            return float(value)
+        if field_definition[FORMAT] == 'B':
+            return value == 'True'
+        else: return value    
 
 class templatehtml(Outmessage):
     ''' uses Genshi library for templating. Genshi is very similar to Kid, and is the fork/follow-up of Kid.

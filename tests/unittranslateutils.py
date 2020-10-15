@@ -5,7 +5,7 @@ from __future__ import print_function
 from __future__ import unicode_literals
 import sys
 import unittest
-import utilsunit
+import tests.utilsunit
 import time
 import bots.botsglobal as botsglobal
 import bots.botslib as botslib

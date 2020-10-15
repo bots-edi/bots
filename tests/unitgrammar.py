@@ -10,7 +10,7 @@ import bots.grammar as grammar
 import bots.inmessage as inmessage
 import bots.outmessage as outmessage
 import bots.botsglobal as botsglobal
-import utilsunit
+import tests.utilsunit
 if sys.version_info[0] > 2:
     basestring = unicode = str
 

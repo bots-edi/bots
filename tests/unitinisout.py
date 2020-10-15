@@ -12,7 +12,7 @@ try:
 except ImportError:
     import simplejson
 
-import utilsunit
+import tests.utilsunit
 import bots.botslib as botslib
 import bots.botsinit as botsinit
 import bots.botsglobal as botsglobal

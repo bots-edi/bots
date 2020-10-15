@@ -1,0 +1,11 @@
+{
+    "HEA": {
+         "string": "Ben",
+         "boolean": true,
+         "int": 1,
+         "long": 1,
+         "float": 1.0,
+         "double": 1.001,
+         "null2": "notnull"
+    }
+}

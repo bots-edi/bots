@@ -1,0 +1,21 @@
+{
+  "name": "MyClass",
+  "type": "record",
+  "namespace": "com.acme.avro",
+  "fields": [
+    {
+      "name": "HEA",
+      "type": {
+        "name": "HEA",
+        "type": "record",
+        "fields": [
+          {
+            "name": "array",
+            "type": "array",
+            "items": "string"
+          }
+        ]
+      }
+    }
+  ]
+}

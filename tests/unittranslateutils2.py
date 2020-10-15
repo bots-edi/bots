@@ -4,7 +4,7 @@ from __future__ import print_function
 #~ from __future__ import unicode_literals  #python2: gives problems; this module contains unicode strings; in function ccode ascii strings are needed (for field).
 import sys
 import unittest
-import utilsunit
+import tests.utilsunit
 import bots.botsglobal as botsglobal
 import bots.botslib as botslib
 import bots.botsinit as botsinit

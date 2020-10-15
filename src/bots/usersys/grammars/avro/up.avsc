@@ -1,0 +1,453 @@
+{
+  "type": "record",
+  "name": "UniversalPrenotification",
+  "namespace": "io.dhlparcel.ppp",
+  "fields": [
+    {
+      "name": "metadata",
+      "type": {
+        "type": "record",
+        "name": "Metadata",
+        "fields": [
+          {
+            "name": "sender",
+            "doc": "The string which identifies the producer of this message.",
+            "type": "string"
+          },
+          {
+            "name": "id",
+            "doc": "The id uniquely identifying this message. This id can be used to make message processing idempotent by dropping messages if another message with this id is already handled.",
+            "type": {
+              "type": "string",
+              "logicalType": "uuid"
+            }
+          },
+          {
+            "name": "created",
+            "doc": "Timestamp on which this message has been created measured in the number of milliseconds from the unix epoch, 1 January 1970 00:00:00.000 UTC.",
+            "type": [
+              "null",
+              {
+                "type": "long",
+                "logicalType": "timestamp-millis"
+              }
+            ]
+          },
+          {
+            "name": "additional",
+            "doc": "Additional metadata which can be added on discretion of the producer, for instance for debugging purposes.",
+            "type": {
+              "type": "map",
+              "values": "string"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "name": "billing",
+      "type": {
+        "type": "record",
+        "name": "Billing",
+        "fields": [
+          {
+            "name": "account_number",
+            "type": "string"
+          },
+          {
+            "name": "debtor",
+            "type": "string"
+          },
+          {
+            "name": "characteristic",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    {
+      "name": "consignee",
+      "type": {
+        "type": "record",
+        "name": "Consignee",
+        "fields": [
+          {
+            "name": "name_1",
+            "type": "string"
+          },
+          {
+            "name": "name_2",
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          {
+            "name": "address",
+            "type": {
+              "type": "record",
+              "name": "Address",
+              "fields": [
+                {
+                  "name": "street",
+                  "type": "string"
+                },
+                {
+                  "name": "house_number",
+                  "type": "string"
+                },
+                {
+                  "name": "house_number_addition",
+                  "type": [
+                    "null",
+                    "string"
+                  ]
+                },
+                {
+                  "name": "postal_code",
+                  "type": "string"
+                },
+                {
+                  "name": "city",
+                  "type": "string"
+                },
+                {
+                  "name": "country",
+                  "doc": "The alpha-2 country code according to the ISO 3166-1 standard, like NL or DE",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          {
+            "name": "telephone_number",
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          {
+            "name": "email",
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          {
+            "name": "contact_name",
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          {
+            "name": "value_added_tax_identification",
+            "type": [
+              "null",
+              "string"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "destination",
+      "type": [
+        "null",
+        {
+          "type": "record",
+          "name": "ServicePoint",
+          "fields": [
+            {
+              "name": "id",
+              "type": "string"
+            }
+          ]
+        },
+        {
+          "type": "record",
+          "name": "Terminal",
+          "fields": [
+            {
+              "name": "id",
+              "type": "string"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "on_behalf_of",
+      "type": [
+        "null",
+        {
+          "type": "record",
+          "name": "OnBehalfOf",
+          "fields": [
+            {
+              "name": "name_1",
+              "type": "string"
+            },
+            {
+              "name": "name_2",
+              "type": [
+                "null",
+                "string"
+              ]
+            },
+            {
+              "name": "address",
+              "type": "Address"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "consignor",
+      "type": {
+        "type": "record",
+        "name": "Consignor",
+        "fields": [
+          {
+            "name": "name_1",
+            "type": "string"
+          },
+          {
+            "name": "name_2",
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          {
+            "name": "address",
+            "type": "Address"
+          },
+          {
+            "name": "value_added_tax_identification",
+            "type": [
+              "null",
+              "string"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "pickup",
+      "type": [
+        "null",
+        {
+          "type": "record",
+          "name": "Pickup",
+          "fields": [
+            {
+              "name": "name_1",
+              "type": "string"
+            },
+            {
+              "name": "name_2",
+              "type": [
+                "null",
+                "string"
+              ]
+            },
+            {
+              "name": "address",
+              "type": "Address"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "shipment",
+      "type": {
+        "type": "record",
+        "name": "Shipment",
+        "fields": [
+          {
+            "name": "id",
+            "doc": "The id uniquely identifying this Shipment.",
+            "type": {
+              "type": "string",
+              "logicalType": "uuid"
+            }
+          },
+          {
+            "name": "menu_group",
+            "type": "string"
+          },
+          {
+            "name": "combiterms",
+            "type": "string"
+          },
+          {
+            "name": "international_combiterms",
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          {
+            "name": "international_product_code",
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          {
+            "name": "product_features",
+            "type": {
+              "type": "array",
+              "items": "string"
+            }
+          },
+          {
+            "name": "process_features",
+            "type": {
+              "type": "array",
+              "items": "string"
+            }
+          },
+          {
+            "name": "value_of_goods",
+            "type": {
+              "type": "record",
+              "name": "MonetaryAmount",
+              "doc": "Description of an amount of money together with its unit. The currency unit uses the standard ISO 4217 currency format. An exponent is added to determine the amount of decimal places that is represented. Example: 50.00 EUR is represented as: { 'amount': 5000, 'currency': 'EUR', 'exponent': 2}",
+              "fields": [
+                {
+                  "name": "amount",
+                  "type": "int"
+                },
+                {
+                  "name": "exponent",
+                  "type": "int"
+                },
+                {
+                  "name": "currency",
+                  "type": "string"
+                }
+              ]
+            }
+          },
+          {
+            "name": "insured_value",
+            "type": "MonetaryAmount"
+          },
+          {
+            "name": "delivery_instructions",
+            "type": {
+              "type": "array",
+              "items": "string"
+            }
+          },
+          {
+            "name": "invoice_text",
+            "type": [
+              "null",
+              "string"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "reference",
+      "type": {
+        "type": "array",
+        "items": {
+          "type": "record",
+          "name": "Reference",
+          "fields": [
+            {
+              "name": "qualifier",
+              "doc": "This could be maybe narrowed down to a enumeration?",
+              "type": "string"
+            },
+            {
+              "name": "reference",
+              "type": "string"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "piece",
+      "type": {
+        "type": "array",
+        "items": {
+          "type": "record",
+          "name": "Piece",
+          "fields": [
+            {
+              "name": "id",
+              "doc": "The id uniquely identifying this piece.",
+              "type": {
+                "type": "string",
+                "logicalType": "uuid"
+              }
+            },
+            {
+              "name": "tracking_code",
+              "doc": "The tracking code that is printed on the piece and is used for track & trace, e.g. 3S1234567890123.",
+              "type": "string"
+            },
+            {
+              "name": "weight_in_grams",
+              "type": [
+                "null",
+                "int"
+              ]
+            },
+            {
+              "name": "dimensions",
+              "type": [
+                "null",
+                {
+                  "type": "record",
+                  "name": "Dimensions",
+                  "doc": "A description of the size of an object something in 3 dimension",
+                  "fields": [
+                    {
+                      "name": "length",
+                      "doc": "The length in centimeters",
+                      "type": "int"
+                    },
+                    {
+                      "name": "width",
+                      "doc": "The width in centimeters",
+                      "type": "int"
+                    },
+                    {
+                      "name": "height",
+                      "doc": "The width in centimeters",
+                      "type": "int"
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "goods_description",
+              "type": [
+                "null",
+                "string"
+              ]
+            },
+            {
+              "name": "marks_and_numbers",
+              "type": [
+                "null",
+                "string"
+              ]
+            }
+          ]
+        }
+      }
+    }
+  ]
+}
