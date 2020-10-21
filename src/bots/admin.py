@@ -91,6 +91,9 @@ class ChannelAdmin(BotsAdmin):
                                             'description': 'For more info see <a target="_blank" href="https://bots-edi.github.io/bots/configuration/channel/file-locking.html">wiki</a><br>',
                                             'classes': ('collapse wide extrapretty',)
                                             }),
+        (_('Kafka specific'), {'fields': ('kafka_topic', 'kafka_brokers', 'kafka_group_id', 'kafka_sasl_username', 'kafka_sasl_password', 'kafka_sasl_mechanisms', 'kafka_security_protocol', 'kafka_auto_offset_reset'),
+                               'classes': ('collapse wide extrapretty',)
+                               }),                                            
         (_('Other'), {'fields': ('testpath', 'keyfile', 'certfile', 'rsrv2', 'rsrv1', 'parameters'),
                       'classes': ('collapse wide extrapretty',)
                       }),

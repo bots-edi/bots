@@ -90,6 +90,7 @@ CHANNELTYPE = (  # Note: in communication.py these channeltypes are converted to
     ('communicationscript', _('communicationscript')),
     ('db', _('db')),
     ('database', _('database (old)')),
+    ('kafka', _('kafka')),
     )
 CONFIRMTYPE = [
     ('ask-email-MDN', _('ask an email confirmation (MDN) when sending')),
@@ -344,6 +345,15 @@ class channel(models.Model):
         'Path to file that contains PEM formatted certificate chain.'))  # added 20121201
     testpath = StripCharField(max_length=256, blank=True, verbose_name=_('Acceptance test path'), help_text=_(
         'Path used during acceptance tests, see <a target="_blank" href="https://bots-edi.github.io/bots/advanced-deployment/change-management.html#isolated-acceptance-testing">wiki</a>.'))  # added 20120111
+
+    kafka_brokers = StripCharField(null=True, max_length=256, blank=True, verbose_name=_('Kafka brokers as a comma separated list. Example: broker1:9092,broker2:9092'))
+    kafka_topic = StripCharField(null=True, max_length=256, blank=True, verbose_name=_('Topic to read from to or write to'))
+    kafka_group_id = StripCharField(null=True,  max_length=256, blank=True, verbose_name=_('Group id'))
+    kafka_sasl_username = StripCharField(null=True, max_length=256, blank=True, verbose_name=_('SASL username to use for authentication'))
+    kafka_sasl_password = StripCharField(max_length=256,null=True, blank=True, verbose_name=_('The name of the env variable containing the SASL password to use for authentication'))
+    kafka_sasl_mechanisms = StripCharField(null=True, max_length=32, blank=True, verbose_name=_('SASL mechanism to use for authentication e.g. SCRAM-SHA-512'))
+    kafka_security_protocol = StripCharField(null=True, max_length=32, blank=True, verbose_name=_('Security protocol to use. For now only SASL_SSL is supported'))
+    kafka_auto_offset_reset = StripCharField(null=True, max_length=32, blank=True, verbose_name=_('auto.offset.reset Where to start reading the topic if no offset has been committed'))
 
     def communicationscript(self):
         return script_link2(os.path.join(botsglobal.ini.get('directories', 'usersysabs'), 'communicationscripts', self.idchannel + '.py'))
