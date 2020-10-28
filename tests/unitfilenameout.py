@@ -6,7 +6,8 @@ import unittest
 import subprocess
 import logging
 import datetime
-import utilsunit
+import sys
+import tests.utilsunit
 import bots.botslib as botslib
 import bots.botsinit as botsinit
 import bots.botsglobal as botsglobal

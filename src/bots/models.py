@@ -45,6 +45,7 @@ STATUS = [
     ]
 EDITYPES = [
     #~ DEFAULT_ENTRY,
+    ('avro', _('avro')),
     ('csv', _('csv')),
     ('database', _('database (old)')),
     ('db', _('db')),

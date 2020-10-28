@@ -1,0 +1,24 @@
+{
+  "name": "MyClass",
+  "type": "record",
+  "namespace": "com.acme.avro",
+  "fields": [
+    {
+      "name": "HEA",
+      "type": {
+        "name": "HEA",
+        "type": "record",
+        "fields": [
+          {
+            "name": "map",
+            "type": {
+              "name": "MyMap",
+              "type": "map",
+              "values": "string"
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "name": "MyClass",
+  "type": "record",
+  "namespace": "com.acme.avro",
+  "fields": [
+      {
+          "name": "name",
+          "type": "string"
+      },
+      {
+          "name": "favorite_number",
+          "type": "string"
+      },
+      {
+          "name": "favorite_color",
+          "type": "string"
+      }
+  ]
+}

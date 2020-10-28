@@ -1,0 +1,24 @@
+{
+  "name": "MyClass",
+  "type": "record",
+  "namespace": "com.acme.avro",
+  "fields": [
+    {
+      "name": "HEA",
+      "type": {
+        "name": "HEA",
+        "type": "record",
+        "fields": [
+          {
+            "name": "enum",
+            "type": {
+              "name": "Suits",
+              "type": "enum",
+              "symbols": ["SPADES", "HEARTS", "DIAMONDS", "CLUBS"]
+            }
+          }
+        ]
+      }
+    }
+  ]
+}
