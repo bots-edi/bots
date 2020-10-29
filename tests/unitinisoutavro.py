@@ -27,6 +27,8 @@ import copy
 if sys.version_info[0] > 2:
     basestring = unicode = str
 
+# plugin avro.zip
+
 class OutmessageAvro(unittest.TestCase):
     #***********************************************************************
     #***********compare avro to json *******
