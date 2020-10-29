@@ -2170,7 +2170,7 @@ class kafka(_comsession):
         self.group_id = self.channeldict['kafka_group_id']
         self.topic = self.channeldict['kafka_topic']
         self.sasl_username = self.channeldict['kafka_sasl_username']
-        self.sasl_password = os.environ.get(self.channeldict['kafka_sasl_password'])
+        self.sasl_password = os.environ.get(self.channeldict['kafka_sasl_password_env_var'])
         self.sasl_mechanisms = self.channeldict['kafka_sasl_mechanisms']
         self.security_protocol = self.channeldict['kafka_security_protocol']
         self.auto_offset_reset = self.channeldict['kafka_auto_offset_reset']
@@ -2202,7 +2202,7 @@ class kafka(_comsession):
 
         self.topic = self.channeldict['kafka_topic']
         self.sasl_username = self.channeldict['kafka_sasl_username']
-        self.sasl_password = os.environ.get(self.channeldict['kafka_sasl_password'])
+        self.sasl_password = os.environ.get(self.channeldict['kafka_sasl_password_env_var'])
         self.sasl_mechanisms = self.channeldict['kafka_sasl_mechanisms']
         self.security_protocol = self.channeldict['kafka_security_protocol']
 

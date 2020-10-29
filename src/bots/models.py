@@ -350,7 +350,7 @@ class channel(models.Model):
     kafka_topic = StripCharField(null=True, max_length=256, blank=True, verbose_name=_('Topic to read from to or write to'))
     kafka_group_id = StripCharField(null=True,  max_length=256, blank=True, verbose_name=_('Group id'))
     kafka_sasl_username = StripCharField(null=True, max_length=256, blank=True, verbose_name=_('SASL username to use for authentication'))
-    kafka_sasl_password = StripCharField(max_length=256,null=True, blank=True, verbose_name=_('The name of the env variable containing the SASL password to use for authentication'))
+    kafka_sasl_password_env_var = StripCharField(max_length=256,null=True, blank=True, verbose_name=_('The name of the env variable containing the SASL password to use for authentication'))
     kafka_sasl_mechanisms = StripCharField(null=True, max_length=32, blank=True, verbose_name=_('SASL mechanism to use for authentication e.g. SCRAM-SHA-512'))
     kafka_security_protocol = StripCharField(null=True, max_length=32, blank=True, verbose_name=_('Security protocol to use. For now only SASL_SSL is supported'))
     kafka_auto_offset_reset = StripCharField(null=True, max_length=32, blank=True, verbose_name=_('auto.offset.reset Where to start reading the topic if no offset has been committed'))
