@@ -33,7 +33,8 @@ from django.utils.translation import ugettext as _
 from . import botslib
 from . import botsglobal
 from .botsconfig import *
-
+from confluent_kafka import Consumer
+from confluent_kafka import Producer
 
 @botslib.log_session
 def run(idchannel, command, idroute, rootidta=None):
@@ -2154,3 +2155,152 @@ class https(http):
             self.cert = (self.channeldict['certfile'], self.channeldict['keyfile'])
         else:
             self.cert = None
+
+class kafka(_comsession):
+
+    def connect(self):
+        if self.channeldict['inorout'] == 'in':
+            self._init_consumer()
+        else:
+            self._init_producer()
+
+    def _init_consumer(self):
+        self.channel_id = self.channeldict['idchannel']
+        self.bootstrap_servers = self.channeldict['kafka_brokers']
+        self.group_id = self.channeldict['kafka_group_id']
+        self.topic = self.channeldict['kafka_topic']
+        self.sasl_username = self.channeldict['kafka_sasl_username']
+        self.sasl_password = os.environ.get(self.channeldict['kafka_sasl_password_env_var'])
+        self.sasl_mechanisms = self.channeldict['kafka_sasl_mechanisms']
+        self.security_protocol = self.channeldict['kafka_security_protocol']
+        self.auto_offset_reset = self.channeldict['kafka_auto_offset_reset']
+
+        config = {
+            'bootstrap.servers': self.bootstrap_servers,
+            'group.id': self.group_id,
+            'enable.auto.commit': False
+        }
+
+        if self.sasl_username and \
+             self.sasl_password and \
+             self.sasl_mechanisms and \
+             self.security_protocol and \
+             self.auto_offset_reset:
+           config['sasl.username'] = self.sasl_username
+           config['sasl.password'] = self.sasl_password
+           config['sasl.mechanisms'] = self.sasl_mechanisms
+           config['security.protocol'] = self.security_protocol
+           config['auto.offset.reset'] = self.auto_offset_reset
+
+        self.c = Consumer(config)
+
+        self.c.subscribe([self.topic])
+
+    def _init_producer(self):
+        self.channel_id = self.channeldict['idchannel']
+        self.bootstrap_servers = self.channeldict['kafka_brokers']
+
+        self.topic = self.channeldict['kafka_topic']
+        self.sasl_username = self.channeldict['kafka_sasl_username']
+        self.sasl_password = os.environ.get(self.channeldict['kafka_sasl_password_env_var'])
+        self.sasl_mechanisms = self.channeldict['kafka_sasl_mechanisms']
+        self.security_protocol = self.channeldict['kafka_security_protocol']
+
+        config = {
+            'bootstrap.servers': self.bootstrap_servers
+        }
+
+        if self.sasl_username and \
+             self.sasl_password and \
+             self.sasl_mechanisms and \
+             self.security_protocol:
+           config['sasl.username'] = self.sasl_username
+           config['sasl.password'] = self.sasl_password
+           config['sasl.mechanisms'] = self.sasl_mechanisms
+           config['security.protocol'] = self.security_protocol
+
+        self.p = Producer(config)
+
+    @botslib.log_session
+    def incommunicate(self):
+        startdatetime = datetime.datetime.now()
+        remove_ta = False
+        while True:
+            try:
+                botsglobal.logger.debug("start polling ")
+                msg = self.c.poll(2.0)
+                if msg is None:
+                    botsglobal.logger.debug("No messages in current poll")
+                    continue
+
+                if msg.error():
+                    botsglobal.logger.error("KafkaConsumer error: {}".format(msg.error()))
+                    continue
+
+                botsglobal.logger.debug("Received kafka msg for topic: {} partition: {} offset: {}.".format(msg.topic(), msg.partition(), msg.offset()))
+                
+                ta_from = botslib.NewTransaction(filename="kafka://{}/{}/{}/{}".format(msg.topic(), msg.partition(), msg.offset(), msg.key()),
+                                         status=EXTERNIN,
+                                         fromchannel=self.channel_id,
+                                         idroute=self.idroute)
+                ta_to = ta_from.copyta(status=FILEIN)
+                remove_ta = True
+                tofilename = unicode(ta_to.idta)
+                tofile = botslib.opendata_bin(tofilename, 'wb')
+                tofile.write(msg.value())
+                tofile.flush()
+                tofile.close()
+                filesize = os.path.getsize(botslib.abspathdata(tofilename))
+                ta_to.update(filename=tofilename, statust=OK, filesize=filesize)
+                ta_from.update(statust=DONE)
+
+                # TODO: Commit every X messages
+                self.c.commit(message=msg)
+            except Exception as e:
+                txt = botslib.txtexc()
+                botslib.ErrorProcess(functionname='kafka-incommunicate', errortext=txt, channeldict=self.channeldict)
+                if remove_ta:
+                    try:
+                        ta_to.delete()
+                    except:
+                        pass
+                break
+            finally:
+                remove_ta = False
+                if (datetime.datetime.now() - startdatetime).seconds >= self.maxsecondsperchannel:
+                    botsglobal.logger.debug("Time up for channel {} in route {}".format(self.channel_id, self.idroute))
+                    break
+
+    @botslib.log_session
+    def outcommunicate(self):
+        for row in botslib.query('''SELECT idta,filename,numberofresends
+                                       FROM ta
+                                      WHERE idta>%(rootidta)s
+                                        AND status=%(status)s
+                                        AND statust=%(statust)s
+                                        AND tochannel=%(tochannel)s
+                                        ''',
+                                 {'tochannel': self.channeldict['idchannel'], 'rootidta': self.rootidta,
+                                     'status': FILEOUT, 'statust': OK}):
+            try:  # for each db-ta:
+                ta_from = botslib.OldTransaction(row[str('idta')])
+                ta_to = ta_from.copyta(status=EXTERNOUT)
+                content = botslib.readdata_bin(row[str('filename')])
+                self.p.produce(topic=self.topic, value=content)
+                self.p.flush()
+                # TODO: callback handler errors
+            except Exception as e:
+                botsglobal.logger.error("Error {}".format(e))
+                txt = botslib.txtexc()
+                ta_to.update(statust=ERROR, errortext=txt, numberofresends=row[str('numberofresends')] + 1)
+            else:
+                ta_to.update(statust=DONE, filename='', numberofresends=row[str('numberofresends')] + 1)
+            finally:
+                ta_from.update(statust=DONE)
+                
+
+    @botslib.log_session
+    def disconnect(self):
+        if self.channeldict['inorout'] == 'in':
+            self.c.unsubscribe()
+            self.c.close()
