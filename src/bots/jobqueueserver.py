@@ -68,13 +68,13 @@ def maxruntimeerror(logger,maxruntime,jobnumber,task_to_run):
 
 #-------------------------------------------------------------------------------
 def launcher(logger,port,lauchfrequency,maxruntime):
-    xmlrpcclient = xmlrpclib.ServerProxy(u'http://localhost:' + unicode(port))
+    xmlrpcclient = xmlrpclib.ServerProxy(u'http://localhost:' + str(port))
     maxseconds = maxruntime*60
     time.sleep(3)   #to allow jobqserver to start
     while True:
         time.sleep(lauchfrequency)
         job = xmlrpcclient.getjob()
-
+    
         if job:       #0 means nothing to launch
             jobnumber = job[1]
             task_to_run = job[2]
@@ -139,10 +139,10 @@ def start():
     logger.info(u'Jobqueue launcher started.')
 
     #the main thread is the xmlrpc server: all adding, getting etc for jobqueue is done via xmlrpc.
-    logger.info(u'Jobqueue server started.')
     server = SimpleXMLRPCServer(('localhost', port),logRequests=False)        
     server.register_instance(Jobqueue(logger))
     try:
+        logger.info(u'Jobqueue server started.')
         server.serve_forever()
     except KeyboardInterrupt:
         pass
