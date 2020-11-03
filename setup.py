@@ -142,6 +142,7 @@ setuptools.setup(
             'bots-engine = bots.engine:start',
             'bots-engine2 = bots.engine:start',
             'bots-grammarcheck = bots.grammarcheck:start',
+            'bots-grammarcheckall = bots.grammarcheck:startmulti',
             'bots-job2queue = bots.job2queue:start',
             'bots-jobqueueserver = bots.jobqueueserver:start',
             'bots-plugoutindex = bots.plugoutindex:start',
