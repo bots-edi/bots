@@ -10,14 +10,14 @@ import atexit
 import glob
 import logging
 #Bots-modules
-from . import botsinit
-from . import botslib
-from . import grammar
-from . import botsglobal
-from .botsconfig import *
+import bots.botsinit as botsinit
+import bots.botslib as botslib
+import bots.grammar as grammar
+import bots.botsglobal as botsglobal
+from bots.botsconfig import *
 
 
-def startmulti(grammardir, editype):
+def startmulti(grammardir):
     ''' specialized tool for bulk checking of grammars while developing botsgrammars
         grammardir: directory with gramars (eg bots/usersys/grammars/edifact)
         editype: eg edifact
@@ -28,19 +28,23 @@ def startmulti(grammardir, editype):
     botsglobal.logger = botsinit.initenginelogging(process_name)
     atexit.register(logging.shutdown)
 
-    for filename in glob.iglob(grammardir):
+    files = glob.iglob(grammardir, recursive=True)
+    files = [f for f in files if os.path.isfile(f)]
+    for filename in files:
         filename_basename = os.path.basename(filename)
-        if filename_basename in ['__init__.py', 'envelope.py']:
+        editype = os.path.basename(os.path.dirname(filename))
+        if filename_basename in ['__init__.py', '__pycache__', 'envelope.py']:
             continue
         if filename_basename.startswith('edifact') or filename_basename.startswith('records') or filename_basename.endswith('records.py'):
             continue
-        if filename_basename.endswith('pyc'):
+        if not filename_basename.endswith('py'):
             continue
         filename_noextension = os.path.splitext(filename_basename)[0]
         try:
             grammar.grammarread(editype, filename_noextension, typeofgrammarfile='grammars')
         except:
             print(botslib.txtexc(), end='\n\n')
+            sys.exit(1)
         else:
             print('OK - no error found in grammar', filename, end='\n\n')
 
