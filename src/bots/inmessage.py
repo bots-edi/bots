@@ -23,8 +23,10 @@ from . import grammar
 from .botsconfig import *
 
 #avro
-from fastavro import reader as avroReader
+from fastavro import schemaless_reader, reader as avroReader
+from fastavro.schema import load_schema
 from uuid import UUID
+from datetime import datetime
 
 ''' Reading/lexing/parsing/splitting an edifile.'''
 
@@ -1727,7 +1729,7 @@ class avro(Inmessage):
 
     def initfromfile(self):
         self.messagegrammarread(typeofgrammarfile='grammars')
-        self._readcontent_avrofile()
+        self._readcontent_avrofile_schemaless()
 
         avroobject = self.rawinput
         if isinstance(avroobject, list):
@@ -1781,6 +1783,8 @@ class avro(Inmessage):
                     thisnode.append(newnode)
             elif isinstance(value, UUID):  # uuid will be serialized by fastavro as a UUID
                 thisnode.record[key] = unicode(value)
+            elif isinstance(value, datetime):  # timestamp will be serialized by fastavro as a datetime
+                thisnode.record[key] = unicode(value.timestamp())
             else:
                 if self.ta_info['checkunknownentities']:
                     raise botslib.InMessageError(_('[J55]: Key "%(key)s" value "%(value)s": is not string, list or dict.'),
@@ -1843,6 +1847,16 @@ class avro(Inmessage):
         with botslib.opendata_bin(self.ta_info['filename'], "rb") as fo:
             reader = avroReader(fo, return_record_name=True)
             self.rawinput = next(reader)
+
+    def _readcontent_avrofile_schemaless(self):
+        ''' read content of avro file to memory.
+        '''
+        botsglobal.logger.debug('Read avro file "%(filename)s".', self.ta_info)
+        _, schemapath = botslib.botsimport('grammars', self.ta_info['editype'], self.ta_info['messagetype'])
+        schema = load_schema(schemapath + '.avsc')
+        with botslib.opendata_bin(self.ta_info['filename'], "rb") as fo:
+            fo.seek(5) # drop first 5 bytes
+            self.rawinput = schemaless_reader(fo, writer_schema = schema, return_record_name=True)
 
 
 class db(Inmessage):

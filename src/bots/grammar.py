@@ -1097,7 +1097,7 @@ class avro(Grammar):
         'I': 'I',  # numercial, implicit decimal
         'B': 'B', # Boolean
         'ENUM': 'ENUM',
-        'UUID': 'UUID'
+        'UUID': 'A'
         }
 
 

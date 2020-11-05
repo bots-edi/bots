@@ -38,6 +38,7 @@ from .botsconfig import *
 from fastavro import writer as avrowriter
 from fastavro.schema import load_schema
 from uuid import UUID
+from datetime import datetime
 
 def outmessage_init(**ta_info):
     ''' dispatch function class Outmessage or subclass
@@ -868,7 +869,7 @@ class jsonnocheck(json):
         del newjsonobject['BOTSIDnr']
         return newjsonobject
 
-class avro(json):
+class avro():
 
     def _write(self, node_instance):
         ''' convert node tree to appropriate python object.
@@ -930,6 +931,8 @@ class avro(json):
             return float(value)
         if field_definition[BFORMAT] == 'UUID':
             return UUID(value)
+        if field_definition[BFORMAT] == 'DT':
+            return datetime.fromtimestamp(float(value))
         if field_definition[FORMAT] == 'B':
             return value == 'True'
         else: return value
