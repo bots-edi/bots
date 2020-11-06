@@ -2158,6 +2158,9 @@ class https(http):
 
 class kafka(_comsession):
 
+    MAX_EMPTY_POLL_COUNT = 3
+    POLL_TIMEOUT = 2.0
+
     def connect(self):
         if self.channeldict['inorout'] == 'in':
             self._init_consumer()
@@ -2225,12 +2228,14 @@ class kafka(_comsession):
     def incommunicate(self):
         startdatetime = datetime.datetime.now()
         remove_ta = False
+        empty_poll_count = 0
         while True:
             try:
                 botsglobal.logger.debug("start polling ")
-                msg = self.c.poll(2.0)
+                msg = self.c.poll(self.POLL_TIMEOUT)
                 if msg is None:
                     botsglobal.logger.debug("No messages in current poll")
+                    empty_poll_count += 1
                     continue
 
                 if msg.error():
@@ -2267,7 +2272,7 @@ class kafka(_comsession):
                 break
             finally:
                 remove_ta = False
-                if (datetime.datetime.now() - startdatetime).seconds >= self.maxsecondsperchannel:
+                if empty_poll_count >= self.MAX_EMPTY_POLL_COUNT or (datetime.datetime.now() - startdatetime).seconds >= self.maxsecondsperchannel:
                     botsglobal.logger.debug("Time up for channel {} in route {}".format(self.channel_id, self.idroute))
                     break
 
