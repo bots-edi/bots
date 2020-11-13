@@ -164,6 +164,10 @@ class Inmessage(message.Message):
             if(value not in field_definition[FORMAT]['ENUM']):
                 self.add2errorlist(_('[F08]%(linpos)s: Record "%(record)s" enum field "%(field)s" not a valid enum: "%(content)s".\n') %
                                        {'linpos': node_instance.linpos(), 'record': self.mpathformat(structure_record[MPATH]), 'field': field_definition[ID], 'content': value})
+        elif field_definition[BFORMAT] == 'B':
+            if value not in ('True', 'False'):
+                self.add2errorlist(_(u'[F09]: Record "%(record)s" field "%(field)s" is not a valid bool.\n')%
+                                    {'record':self.mpathformat(structure_record[MPATH]),'field':field_definition[ID],'content':value})
         else:  # elif field_definition[BFORMAT] in 'RNI':   #numerics (R, N, I)
             if self.ta_info['lengthnumericbare']:
                 chars_not_counted = '-+' + self.ta_info['decimaal']

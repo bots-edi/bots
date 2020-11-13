@@ -341,6 +341,10 @@ class Outmessage(message.Message):
             if(value not in field_definition[FORMAT]['ENUM']):
                 self.add2errorlist(_('[F35]%(linpos)s: Record "%(record)s" enum field "%(field)s" not a valid enum: "%(content)s".\n') %
                                        {'linpos': node_instance.linpos(), 'record': self.mpathformat(structure_record[MPATH]), 'field': field_definition[ID], 'content': value})
+        elif field_definition[BFORMAT] == 'B':
+            if value not in ('True', 'False'):
+                self.add2errorlist(_(u'[F09]: Record "%(record)s" field "%(field)s" is not a valid bool.\n')%
+                                    {'record':self.mpathformat(structure_record[MPATH]),'field':field_definition[ID],'content':value})
         else:  # numerics
             #~ if value[0] == '-':
                 #~ minussign = '-'
@@ -933,7 +937,7 @@ class avro():
             return UUID(value)
         if field_definition[BFORMAT] == 'DT':
             return datetime.fromtimestamp(float(value))
-        if field_definition[FORMAT] == 'B':
+        if field_definition[BFORMAT] == 'B':
             return value == 'True'
         else: return value
 
