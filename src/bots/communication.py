@@ -2160,6 +2160,7 @@ class kafka(_comsession):
 
     MAX_EMPTY_POLL_COUNT = 3
     POLL_TIMEOUT = 2.0
+    COMMIT_INTERVAL = 100
 
     def connect(self):
         if self.channeldict['inorout'] == 'in':
@@ -2228,7 +2229,9 @@ class kafka(_comsession):
     def incommunicate(self):
         startdatetime = datetime.datetime.now()
         remove_ta = False
+        msg_count = 0
         empty_poll_count = 0
+        
         while True:
             try:
                 botsglobal.logger.debug("start polling ")
@@ -2241,7 +2244,7 @@ class kafka(_comsession):
                 if msg.error():
                     botsglobal.logger.error("KafkaConsumer error: {}".format(msg.error()))
                     continue
-
+                msg_count += 1        
                 botsglobal.logger.debug("Received kafka msg for topic: {} partition: {} offset: {}.".format(msg.topic(), msg.partition(), msg.offset()))
                 
                 ta_from = botslib.NewTransaction(filename="kafka://{}/{}/{}/{}".format(msg.topic(), msg.partition(), msg.offset(), msg.key()),
@@ -2258,9 +2261,8 @@ class kafka(_comsession):
                 filesize = os.path.getsize(botslib.abspathdata(tofilename))
                 ta_to.update(filename=tofilename, statust=OK, filesize=filesize)
                 ta_from.update(statust=DONE)
-
-                # TODO: Commit every X messages
-                self.c.commit(message=msg)
+                if msg_count % self.COMMIT_INTERVAL == 0:
+                    self.c.commit(message=msg)
             except Exception as e:
                 txt = botslib.txtexc()
                 botslib.ErrorProcess(functionname='kafka-incommunicate', errortext=txt, channeldict=self.channeldict)
@@ -2271,6 +2273,8 @@ class kafka(_comsession):
                         pass
                 break
             finally:
+                if msg:
+                    self.c.commit(message=msg)
                 remove_ta = False
                 if empty_poll_count >= self.MAX_EMPTY_POLL_COUNT or (datetime.datetime.now() - startdatetime).seconds >= self.maxsecondsperchannel:
                     botsglobal.logger.debug("Time up for channel {} in route {}".format(self.channel_id, self.idroute))
