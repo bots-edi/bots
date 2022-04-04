@@ -3,7 +3,7 @@
 ## Introduction 
 This dockerized version should provide a quick installable version of BOTS that runs "out of the box". 
 
-The file contains a dockerized version with all optional functionalities activiated in BOTS: 
+The file contains a dockerized version with all optional functionalities activated in BOTS: 
 
 1. Web-Server (default)
 2. Directory Monitor
@@ -18,11 +18,11 @@ In addition, following tools are used to control the environment:
 ## Docker Compose File
 The docker compose file stored at the root of this repo, may be used to create the instance of BOTS by issueing: 
 
-	docker-composer -f complete.yaml up 
+	docker-compose -f complete.yaml up 
 	
 
 Docker will then build BOTS based on Ubuntu 16:04 and Python 2.7. 
-Supervisor's http log-in can be passwort protected through environment variables, here defined as SUPERVUSER and SUPERVPASS. 
+Supervisor's http log-in can be password protected through environment variables, here defined as SUPERVUSER and SUPERVPASS. 
 
 Port 8080 is used to provide BOTS Web interface
 Port 9001 is used for Supervisor HTTP interface

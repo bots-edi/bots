@@ -46,13 +46,13 @@ EMAIL_HOST_PASSWORD = ''    #Default: ''. PASSWORD to use for the SMTP server de
 #~ #PostgreSQL:
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'botsdb',
-        'USER': 'bots',
-        'PASSWORD': 'botsbots',
-        'HOST': '127.0.0.1',
-        'PORT': '5432',
-        'OPTIONS': {},
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(PROJECT_PATH, 'botssys/sqlitedb/botsdb'),
+        'USER': '',         #not needed for SQLite
+        'PASSWORD': '',     #not needed for SQLite
+        'HOST': '',         #not needed for SQLite
+        'PORT': '',         #not needed for SQLite
+        'OPTIONS': {},      #not needed for SQLite
         }
     }
 
